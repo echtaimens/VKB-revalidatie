@@ -649,146 +649,184 @@ function showDayComplete() {
 function runBallAnim(ctx, canvas, bounces, kick) {
   cancelAnimationFrame(animFrame);
   const W = canvas.width, H = canvas.height;
+  const ballR = 26;
+  const GRAVITY = 1.1;
 
-  const kneeX = W * 0.5;
-  const kneeY = H * 0.62;
-  const ballR = 20;
-
-  let ballX = kneeX;
-  let ballY = kneeY - ballR - 60;
-  let ballVY = 0;
-  let ballVX = 0;
+  // Ball starts off-screen bottom-left
+  let ballX = -ballR;
+  let ballY = H + ballR;
   let ballRot = 0;
-  let bouncesShown = 0;
-  let kicked = false;
   let done = false;
-  let phase = 0;
+  let bounced = false;
+
+  // Phase 1: fly in from bottom-left to bounce point (center-bottom area)
+  const bounceX = W * 0.48;
+  const bounceY = H * 0.82;
+
+  // Phase 2: after bounce, fly to top-right
+  // We'll use a parametric approach: t goes 0→1
+  let t = 0;
+  const PHASE1_DURATION = 38; // frames
+  const PHASE2_DURATION = 42; // frames
+  let frame = 0;
+
+  // Easing
+  function easeInOut(t) { return t < 0.5 ? 2*t*t : -1+(4-2*t)*t; }
+  function easeOut(t) { return 1 - (1-t)*(1-t); }
 
   function drawBall(x, y, rot) {
     ctx.save();
     ctx.translate(x, y);
     ctx.rotate(rot);
+    // Shadow
+    ctx.beginPath();
+    ctx.ellipse(0, ballR + 4, ballR * 0.7, 5, 0, 0, Math.PI * 2);
+    ctx.fillStyle = 'rgba(0,0,0,0.18)';
+    ctx.fill();
+    // Ball body
     ctx.beginPath();
     ctx.arc(0, 0, ballR, 0, Math.PI * 2);
-    ctx.fillStyle = '#f5f5f5';
+    ctx.fillStyle = '#f0f0f0';
     ctx.fill();
-    ctx.strokeStyle = '#222';
+    ctx.strokeStyle = '#1a1a1a';
     ctx.lineWidth = 1.5;
     ctx.stroke();
-    ctx.fillStyle = '#222';
+    // Pentagon center
     ctx.beginPath();
-    ctx.arc(0, 0, ballR * 0.3, 0, Math.PI * 2);
+    ctx.arc(0, 0, ballR * 0.28, 0, Math.PI * 2);
+    ctx.fillStyle = '#1a1a1a';
+    ctx.fill();
+    // 5 patches
+    for (let i = 0; i < 5; i++) {
+      const angle = (i / 5) * Math.PI * 2 - Math.PI / 2;
+      const px = Math.cos(angle) * ballR * 0.58;
+      const py = Math.sin(angle) * ballR * 0.58;
+      ctx.beginPath();
+      ctx.arc(px, py, ballR * 0.22, 0, Math.PI * 2);
+      ctx.fillStyle = '#1a1a1a';
+      ctx.fill();
+    }
+    ctx.restore();
+  }
+
+  // Squash on bounce
+  function drawBallSquash(x, y, rot, squashY, squashX) {
+    ctx.save();
+    ctx.translate(x, y);
+    ctx.rotate(rot);
+    ctx.scale(squashX, squashY);
+    ctx.beginPath();
+    ctx.arc(0, 0, ballR, 0, Math.PI * 2);
+    ctx.fillStyle = '#f0f0f0';
+    ctx.fill();
+    ctx.strokeStyle = '#1a1a1a';
+    ctx.lineWidth = 1.5 / Math.min(squashX, squashY);
+    ctx.stroke();
+    ctx.beginPath();
+    ctx.arc(0, 0, ballR * 0.28, 0, Math.PI * 2);
+    ctx.fillStyle = '#1a1a1a';
     ctx.fill();
     for (let i = 0; i < 5; i++) {
       const angle = (i / 5) * Math.PI * 2 - Math.PI / 2;
+      const px = Math.cos(angle) * ballR * 0.58;
+      const py = Math.sin(angle) * ballR * 0.58;
       ctx.beginPath();
-      ctx.moveTo(Math.cos(angle) * ballR * 0.3, Math.sin(angle) * ballR * 0.3);
-      ctx.lineTo(Math.cos(angle) * ballR * 0.85, Math.sin(angle) * ballR * 0.85);
-      ctx.strokeStyle = '#444';
-      ctx.lineWidth = 1.5;
+      ctx.arc(px, py, ballR * 0.22, 0, Math.PI * 2);
+      ctx.fillStyle = '#1a1a1a';
+      ctx.fill();
+    }
+    ctx.restore();
+  }
+
+  // Speed lines
+  function drawSpeedLines(x, y, vx, vy, alpha) {
+    ctx.save();
+    ctx.globalAlpha = alpha;
+    ctx.strokeStyle = 'rgba(255,255,255,0.6)';
+    ctx.lineWidth = 2;
+    for (let i = 1; i <= 3; i++) {
+      const len = i * 10;
+      ctx.beginPath();
+      ctx.moveTo(x - vx * i * 0.8, y - vy * i * 0.8);
+      ctx.lineTo(x - vx * i * 0.8 - vx * 0.4, y - vy * i * 0.8 - vy * 0.4);
+      ctx.globalAlpha = alpha * (0.5 - i * 0.12);
       ctx.stroke();
     }
     ctx.restore();
   }
 
-  function drawLegs(swingAngle) {
-    const hipY = H * 0.68;
-    const hipLX = W * 0.35;
-    const hipRX = W * 0.65;
+  // Impact stars at bounce point
+  let showImpact = false;
+  let impactFrame = 0;
 
-    ctx.fillStyle = '#2d6a4f';
-    ctx.beginPath();
-    if (ctx.roundRect) ctx.roundRect(hipLX - 10, hipY - 18, (hipRX - hipLX) + 20, 28, 6);
-    else ctx.rect(hipLX - 10, hipY - 18, (hipRX - hipLX) + 20, 28);
-    ctx.fill();
-
-    const leftKneeX = hipLX + 5, leftKneeY = hipY + 50;
-    const leftFootX = hipLX, leftFootY = hipY + 100;
-
-    ctx.strokeStyle = '#e8c99a';
-    ctx.lineWidth = 18;
-    ctx.lineCap = 'round';
-    ctx.beginPath(); ctx.moveTo(hipLX, hipY); ctx.lineTo(leftKneeX, leftKneeY); ctx.stroke();
-    ctx.beginPath(); ctx.moveTo(leftKneeX, leftKneeY); ctx.lineTo(leftFootX, leftFootY); ctx.stroke();
-    ctx.lineWidth = 14;
-    ctx.beginPath(); ctx.moveTo(leftFootX, leftFootY); ctx.lineTo(leftFootX - 18, leftFootY + 6); ctx.stroke();
-    ctx.strokeStyle = '#c0392b'; ctx.lineWidth = 5;
-    ctx.beginPath(); ctx.moveTo(leftFootX - 5, leftFootY - 12); ctx.lineTo(leftFootX - 5, leftFootY - 5); ctx.stroke();
-
-    const rightKneeX = hipRX - 5, rightKneeY = hipY + 45;
-    const shinLen = 55;
-    const rightFootX = rightKneeX + Math.sin(swingAngle) * shinLen;
-    const rightFootY = rightKneeY + Math.cos(swingAngle) * shinLen;
-
-    ctx.strokeStyle = '#e8c99a'; ctx.lineWidth = 18;
-    ctx.beginPath(); ctx.moveTo(hipRX, hipY); ctx.lineTo(rightKneeX, rightKneeY); ctx.stroke();
-    ctx.beginPath(); ctx.moveTo(rightKneeX, rightKneeY); ctx.lineTo(rightFootX, rightFootY); ctx.stroke();
-    ctx.lineWidth = 14; ctx.strokeStyle = '#d4a574';
-    ctx.beginPath(); ctx.moveTo(rightFootX, rightFootY);
-    ctx.lineTo(rightFootX + Math.cos(swingAngle - 0.3) * 20, rightFootY - Math.sin(swingAngle - 0.3) * 8); ctx.stroke();
-
-    ctx.fillStyle = '#d4a574';
-    ctx.beginPath(); ctx.arc(rightKneeX, rightKneeY, 9, 0, Math.PI * 2); ctx.fill();
-    ctx.beginPath(); ctx.arc(leftKneeX, leftKneeY, 9, 0, Math.PI * 2); ctx.fill();
-
-    return { rightFootX, rightFootY };
+  function drawImpact(x, y, progress) {
+    ctx.save();
+    const numRays = 8;
+    for (let i = 0; i < numRays; i++) {
+      const angle = (i / numRays) * Math.PI * 2;
+      const len = progress * ballR * 1.8;
+      ctx.beginPath();
+      ctx.moveTo(x + Math.cos(angle) * ballR * 0.5, y + Math.sin(angle) * ballR * 0.5);
+      ctx.lineTo(x + Math.cos(angle) * (ballR * 0.5 + len), y + Math.sin(angle) * (ballR * 0.5 + len));
+      ctx.strokeStyle = `rgba(255, 220, 50, ${1 - progress})`;
+      ctx.lineWidth = 3 * (1 - progress);
+      ctx.stroke();
+    }
+    ctx.restore();
   }
-
-  let legAngle = 0.2;
 
   function animate() {
     ctx.clearRect(0, 0, W, H);
-    phase += 0.05;
+    frame++;
 
-    if (!kick) {
-      ballVY += 1.4; ballY += ballVY;
-      legAngle = Math.sin(phase * 1.5) * 0.25 + 0.2;
-      const { rightFootX, rightFootY } = drawLegs(legAngle);
+    if (frame <= PHASE1_DURATION) {
+      // Phase 1: arc from bottom-left into bounce point
+      const p = frame / PHASE1_DURATION;
+      const ep = easeInOut(p);
+      // Parabolic arc: start bottom-left, land at bounceX/bounceY
+      const startX = -ballR * 2;
+      const startY = H + ballR * 2;
+      // Control point for arc (gives it a nice curved path)
+      const cpX = bounceX * 0.3;
+      const cpY = bounceY - H * 0.35;
+      ballX = (1-ep)*(1-ep)*startX + 2*(1-ep)*ep*cpX + ep*ep*bounceX;
+      ballY = (1-ep)*(1-ep)*startY + 2*(1-ep)*ep*cpY + ep*ep*bounceY;
+      ballRot += 0.12;
+      const vx = ballX - ((1-(ep-0.01))*(1-(ep-0.01))*startX + 2*(1-(ep-0.01))*(ep-0.01)*cpX + (ep-0.01)*(ep-0.01)*bounceX);
+      const vy = ballY - ((1-(ep-0.01))*(1-(ep-0.01))*startY + 2*(1-(ep-0.01))*(ep-0.01)*cpY + (ep-0.01)*(ep-0.01)*bounceY);
+      drawSpeedLines(ballX, ballY, vx * 3, vy * 3, 0.7);
       drawBall(ballX, ballY, ballRot);
-      ballRot += ballVX * 0.05;
-      const dist = Math.sqrt((ballX - rightFootX) ** 2 + (ballY - rightFootY) ** 2);
-      if (dist < ballR + 12 && ballVY > 0) {
-        ballVY = -15; ballVX = (Math.random() - 0.5) * 2; bouncesShown++;
-        if (bouncesShown >= 4) done = true;
-      }
-      ballX += ballVX;
-      if (ballX < W * 0.3) ballVX += 0.3;
-      if (ballX > W * 0.7) ballVX -= 0.3;
+    } else if (frame <= PHASE1_DURATION + 8) {
+      // Bounce squash frames
+      const bf = frame - PHASE1_DURATION;
+      const squashProgress = bf / 8;
+      const squashY = bf <= 4 ? 1 - 0.35 * (bf / 4) : 0.65 + 0.35 * ((bf - 4) / 4);
+      const squashX = bf <= 4 ? 1 + 0.25 * (bf / 4) : 1.25 - 0.25 * ((bf - 4) / 4);
+      drawImpact(bounceX, bounceY + ballR * 0.8, squashProgress);
+      drawBallSquash(bounceX, bounceY, ballRot, squashY, squashX);
+      ballRot += 0.08;
     } else {
-      if (!kicked && bouncesShown < 2) {
-        ballVY += 1.4; ballY += ballVY;
-        legAngle = Math.sin(phase * 1.5) * 0.2 + 0.2;
-        const { rightFootX, rightFootY } = drawLegs(legAngle);
-        drawBall(ballX, ballY, ballRot);
-        const dist = Math.sqrt((ballX - rightFootX) ** 2 + (ballY - rightFootY) ** 2);
-        if (dist < ballR + 12 && ballVY > 0) { ballVY = -15; ballVX = 0; bouncesShown++; }
-      } else if (!kicked) {
-        kicked = true; ballVY = -22; ballVX = 14; legAngle = -0.8;
-      }
-      if (kicked) {
-        legAngle = Math.min(legAngle + 0.06, 0.3);
-        drawLegs(legAngle);
-        ballVY += 0.6; ballY += ballVY; ballX += ballVX; ballRot += 0.25; ballVX *= 0.99;
-        drawBall(ballX, ballY, ballRot);
-        ctx.save();
-        for (let t = 1; t <= 4; t++) {
-          ctx.beginPath();
-          ctx.arc(ballX - ballVX * t * 1.2, ballY - ballVY * t * 0.3, ballR * (1 - t * 0.18), 0, Math.PI * 2);
-          ctx.fillStyle = `rgba(255,255,255,${0.08 - t * 0.015})`;
-          ctx.fill();
-        }
-        ctx.restore();
-        if (ballX > W + 50 || ballY > H + 50 || ballY < -50) done = true;
-      } else {
-        drawLegs(legAngle);
-        drawBall(ballX, ballY, ballRot);
-      }
+      // Phase 2: launch to top-right
+      const p2 = (frame - PHASE1_DURATION - 8) / PHASE2_DURATION;
+      if (p2 >= 1) { done = true; return; }
+      const ep2 = easeOut(p2);
+      const endX = W + ballR * 3;
+      const endY = -ballR * 3;
+      const cp2X = W * 0.75;
+      const cp2Y = H * 0.1;
+      ballX = (1-ep2)*(1-ep2)*bounceX + 2*(1-ep2)*ep2*cp2X + ep2*ep2*endX;
+      ballY = (1-ep2)*(1-ep2)*bounceY + 2*(1-ep2)*ep2*cp2Y + ep2*ep2*endY;
+      ballRot += 0.18;
+      const prevEp = easeOut(Math.max(0, p2 - 0.02));
+      const pvx = ballX - ((1-prevEp)*(1-prevEp)*bounceX + 2*(1-prevEp)*prevEp*cp2X + prevEp*prevEp*endX);
+      const pvy = ballY - ((1-prevEp)*(1-prevEp)*bounceY + 2*(1-prevEp)*prevEp*cp2Y + prevEp*prevEp*endY);
+      drawSpeedLines(ballX, ballY, pvx * 3, pvy * 3, 0.8 * (1 - p2));
+      drawBall(ballX, ballY, ballRot);
     }
+
     if (!done) animFrame = requestAnimationFrame(animate);
   }
 
-  ballY = kneeY - ballR - 70;
-  ballVY = 0;
   animate();
 }
 
