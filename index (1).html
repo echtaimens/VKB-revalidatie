@@ -1,0 +1,939 @@
+<!DOCTYPE html>
+<html lang="nl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="default">
+<meta name="apple-mobile-web-app-title" content="Claudia's VKB Revalidatie">
+<meta name="theme-color" content="#2d6a4f">
+<title>Claudia's VKB Revalidatie</title>
+<script>
+// Inline manifest zodat geen manifest.json bestand nodig is
+const manifestData = {
+  name: "Claudia's VKB Revalidatie",
+  short_name: "VKB",
+  description: "Dagelijks revalidatieschema na VKB reconstructie",
+  start_url: "./index.html",
+  display: "standalone",
+  background_color: "#f5f0e8",
+  theme_color: "#2d6a4f",
+  orientation: "portrait"
+};
+const manifestBlob = new Blob([JSON.stringify(manifestData)], {type:'application/json'});
+const manifestUrl = URL.createObjectURL(manifestBlob);
+document.write('<link rel="manifest" href="' + manifestUrl + '">');
+</script>
+<link rel="apple-touch-icon" id="appleTouchIcon" href="">
+<link rel="icon" id="favicon" href="" type="image/png">
+<script>
+(function(){
+  function makeIcon(size) {
+    const c = document.createElement('canvas');
+    c.width = c.height = size;
+    const ctx = c.getContext('2d');
+    const W = size, H = size;
+    // Emoji canvas wit maken
+    const ec = document.createElement('canvas');
+    ec.width = W; ec.height = H;
+    const ectx = ec.getContext('2d');
+    ectx.font = Math.floor(W * 0.755) + 'px serif';
+    ectx.textAlign = 'center';
+    ectx.textBaseline = 'alphabetic';
+    ectx.fillText('\uD83E\uDDB5', W/2, H * 0.822);
+    const id = ectx.getImageData(0, 0, W, H);
+    for (let i = 0; i < id.data.length; i += 4) {
+      if (id.data[i+3] > 0) { id.data[i]=255; id.data[i+1]=255; id.data[i+2]=255; }
+    }
+    ectx.putImageData(id, 0, 0);
+    // Groene achtergrond
+    const grad = ctx.createLinearGradient(0,0,W,H);
+    grad.addColorStop(0,'#40916c'); grad.addColorStop(1,'#1b4332');
+    const r = Math.floor(W*0.219);
+    ctx.beginPath();
+    ctx.moveTo(r,0); ctx.lineTo(W-r,0); ctx.quadraticCurveTo(W,0,W,r);
+    ctx.lineTo(W,H-r); ctx.quadraticCurveTo(W,H,W-r,H);
+    ctx.lineTo(r,H); ctx.quadraticCurveTo(0,H,0,H-r);
+    ctx.lineTo(0,r); ctx.quadraticCurveTo(0,0,r,0);
+    ctx.closePath();
+    ctx.fillStyle = grad; ctx.fill();
+    // Wit been
+    ctx.drawImage(ec, 0, 0);
+    // Rode cirkel
+    const sf = size/512;
+    ctx.beginPath();
+    ctx.arc(338*sf, 255*sf, 45*sf, 0, Math.PI*2);
+    ctx.fillStyle = 'rgba(230,57,70,0.9)'; ctx.fill();
+    return c.toDataURL('image/png');
+  }
+  window.addEventListener('DOMContentLoaded', function() {
+    const data = makeIcon(192);
+    document.getElementById('appleTouchIcon').href = data;
+    document.getElementById('favicon').href = data;
+  });
+})();
+</script>
+<link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&family=DM+Sans:wght@300;400;500;600&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --bg: #f5f0e8;
+    --card: #fffdf8;
+    --accent: #2d6a4f;
+    --accent2: #74c69d;
+    --text: #1a1a1a;
+    --muted: #7a7a6e;
+    --border: #e0d9cc;
+    --block1: #e8f4f0;
+    --block2: #fef9ec;
+    --block3: #eef4ff;
+    --block4: #fdf0f0;
+    --block5: #f5eeff;
+    --safe-top: env(safe-area-inset-top, 0px);
+    --safe-bottom: env(safe-area-inset-bottom, 0px);
+  }
+  * { margin: 0; padding: 0; box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
+  html { scroll-behavior: smooth; }
+  body {
+    background: var(--bg);
+    font-family: 'DM Sans', sans-serif;
+    color: var(--text);
+    min-height: 100vh;
+    padding: calc(var(--safe-top) + 1.5rem) 1rem calc(var(--safe-bottom) + 5rem);
+  }
+  .page { max-width: 600px; margin: 0 auto; }
+
+  /* HEADER */
+  header { margin-bottom: 1.5rem; padding-bottom: 1.2rem; border-bottom: 2px solid var(--border); }
+  .header-top { display: flex; align-items: flex-start; justify-content: space-between; flex-wrap: wrap; gap: 0.5rem; }
+  .title-block h1 { font-family: 'DM Serif Display', serif; font-size: 2rem; line-height: 1.1; color: var(--accent); }
+  .title-block h1 em { font-style: italic; color: var(--text); }
+  .title-block p { margin-top: 0.3rem; font-size: 0.8rem; color: var(--muted); }
+  .badge { background: var(--accent); color: white; font-size: 0.7rem; font-weight: 600; padding: 0.25rem 0.7rem; border-radius: 20px; letter-spacing: 0.05em; text-transform: uppercase; white-space: nowrap; margin-top: 0.3rem; }
+
+  /* PROGRESS */
+  .progress-wrap { background: var(--card); border: 1px solid var(--border); border-radius: 14px; padding: 1rem 1.2rem; margin-bottom: 1.2rem; box-shadow: 0 2px 8px rgba(0,0,0,0.04); }
+  .progress-top { display: flex; justify-content: space-between; align-items: center; margin-bottom: 0.5rem; }
+  .progress-top .label { font-size: 0.82rem; color: var(--muted); font-weight: 500; }
+  .progress-top .pct { font-family: 'DM Serif Display', serif; font-size: 1.4rem; color: var(--accent); }
+  .bar-bg { height: 10px; background: var(--border); border-radius: 99px; overflow: hidden; }
+  .bar-fill { height: 100%; background: linear-gradient(90deg, var(--accent2), var(--accent)); border-radius: 99px; width: 0%; transition: width 0.4s cubic-bezier(0.4,0,0.2,1); }
+  .progress-sub { font-size: 0.75rem; color: var(--muted); margin-top: 0.4rem; display: flex; justify-content: space-between; align-items: center; }
+  .reset-btn { background: none; border: 1px solid var(--border); color: var(--muted); font-size: 0.7rem; padding: 0.2rem 0.6rem; border-radius: 8px; cursor: pointer; font-family: 'DM Sans', sans-serif; }
+
+  /* REEKS PROGRESS */
+  .reeks-wrap { background: var(--card); border: 1px solid var(--border); border-radius: 14px; padding: 0.9rem 1.2rem; margin-bottom: 1.2rem; box-shadow: 0 2px 8px rgba(0,0,0,0.04); }
+  .reeks-title { font-size: 0.75rem; font-weight: 600; color: var(--muted); text-transform: uppercase; letter-spacing: 0.07em; margin-bottom: 0.7rem; }
+  .reeks-dots { display: flex; gap: 0.5rem; align-items: center; }
+  .reeks-dot { width: 36px; height: 36px; border-radius: 50%; border: 2px solid var(--border); background: white; display: flex; align-items: center; justify-content: center; font-size: 0.65rem; font-weight: 700; color: var(--muted); transition: all 0.3s; flex-shrink: 0; }
+  .reeks-dot.done { background: var(--accent); border-color: var(--accent); color: white; transform: scale(1.1); }
+  .reeks-label { font-size: 0.72rem; color: var(--muted); margin-left: 0.3rem; }
+
+  /* CALENDAR */
+  .calendar-wrap { background: var(--card); border: 1px solid var(--border); border-radius: 14px; padding: 0.9rem 1.2rem; margin-bottom: 1.2rem; box-shadow: 0 2px 8px rgba(0,0,0,0.04); }
+  .calendar-title { font-size: 0.75rem; font-weight: 600; color: var(--muted); text-transform: uppercase; letter-spacing: 0.07em; margin-bottom: 0.8rem; }
+  .week-block { margin-bottom: 0.8rem; }
+  .week-label { font-size: 0.68rem; color: var(--muted); font-weight: 600; margin-bottom: 0.4rem; text-transform: uppercase; letter-spacing: 0.05em; }
+  .week-days { display: flex; gap: 0.35rem; flex-wrap: wrap; }
+  .day-cell { width: 38px; height: 48px; border-radius: 8px; border: 1.5px solid var(--border); background: white; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 1px; transition: all 0.3s; }
+  .day-cell.today { border-color: var(--accent); border-width: 2px; }
+  .day-cell.future { opacity: 0.35; }
+  .day-cell .day-name { font-size: 0.55rem; font-weight: 600; color: var(--muted); text-transform: uppercase; }
+  .day-cell .day-medal { font-size: 1.1rem; line-height: 1; }
+  .day-cell .day-num { font-size: 0.6rem; color: var(--muted); }
+  .day-cell.achieved { background: linear-gradient(135deg, #f8f4ff, #fff8f0); border-color: #c9a84c; }
+
+  /* BLOCKS */
+  .section-label { font-size: 0.7rem; font-weight: 600; color: var(--muted); text-transform: uppercase; letter-spacing: 0.08em; margin: 1.2rem 0 0.6rem; }
+  .block { border-radius: 14px; overflow: hidden; border: 1px solid var(--border); background: var(--card); box-shadow: 0 2px 8px rgba(0,0,0,0.04); margin-bottom: 0.8rem; }
+  .block-header { padding: 0.7rem 1.1rem; display: flex; align-items: center; justify-content: space-between; cursor: pointer; user-select: none; }
+  .block-1 .block-header { background: var(--block1); }
+  .block-2 .block-header { background: var(--block2); }
+  .block-3 .block-header { background: var(--block3); }
+  .block-4 .block-header { background: var(--block4); }
+  .block-5 .block-header { background: var(--block5); }
+  .block-header-left { display: flex; align-items: center; gap: 0.7rem; }
+  .block-header .time { font-family: 'DM Serif Display', serif; font-size: 1.2rem; }
+  .block-header .block-label { font-size: 0.68rem; font-weight: 600; color: var(--muted); text-transform: uppercase; letter-spacing: 0.06em; }
+  .block-progress { font-size: 0.72rem; color: var(--muted); font-weight: 500; display: flex; align-items: center; gap: 0.5rem; }
+  .block-done-badge { background: var(--accent); color: white; font-size: 0.65rem; font-weight: 700; padding: 0.15rem 0.5rem; border-radius: 10px; display: none; }
+  .block-done-badge.visible { display: inline-block; }
+  .chevron { font-size: 0.8rem; color: var(--muted); transition: transform 0.2s; margin-left: 0.3rem; }
+  .block.collapsed .chevron { transform: rotate(-90deg); }
+  .block.collapsed .exercise-list { display: none; }
+
+  /* EXERCISES */
+  .exercise-list { padding: 0.4rem 0; }
+  .exercise-item { display: flex; align-items: center; padding: 0.6rem 1rem; gap: 0.75rem; border-bottom: 1px solid var(--border); cursor: pointer; -webkit-user-select: none; user-select: none; }
+  .exercise-item:last-child { border-bottom: none; }
+  .exercise-item:active { background: rgba(0,0,0,0.03); }
+  .check { width: 22px; height: 22px; border-radius: 50%; border: 2px solid var(--border); flex-shrink: 0; transition: all 0.2s; position: relative; background: white; }
+  .check.done { background: var(--accent); border-color: var(--accent); transform: scale(1.05); }
+  .check.done::after { content: '✓'; position: absolute; top: 50%; left: 50%; transform: translate(-50%,-50%); color: white; font-size: 11px; font-weight: 700; }
+  .ex-name { flex: 1; font-size: 0.86rem; font-weight: 500; line-height: 1.3; }
+  .ex-name.done-text { color: var(--muted); text-decoration: line-through; text-decoration-color: var(--accent2); }
+  .ex-sub { font-size: 0.72rem; color: var(--muted); font-weight: 400; display: block; }
+  .ex-freq { font-size: 0.75rem; font-weight: 600; color: var(--accent); background: rgba(45,106,79,0.08); padding: 0.18rem 0.5rem; border-radius: 6px; white-space: nowrap; flex-shrink: 0; }
+  .ex-freq.alt { color: #b07d00; background: rgba(212,160,23,0.1); }
+  .ex-freq.pump { color: #7a5c99; background: rgba(122,92,153,0.1); }
+
+  /* LEGEND */
+  .legend { margin-top: 1.2rem; padding: 0.8rem 1rem; background: var(--card); border: 1px solid var(--border); border-radius: 12px; display: flex; flex-wrap: wrap; gap: 0.7rem; }
+  .legend-item { display: flex; align-items: center; gap: 0.35rem; font-size: 0.75rem; color: var(--muted); }
+  .legend-dot { width: 8px; height: 8px; border-radius: 50%; flex-shrink: 0; }
+
+  footer { margin-top: 1.5rem; text-align: center; font-size: 0.7rem; color: var(--muted); line-height: 1.6; }
+
+  /* ANIMATION OVERLAY */
+  .anim-overlay {
+    position: fixed; inset: 0; background: rgba(0,0,0,0.7);
+    display: flex; flex-direction: column; align-items: center; justify-content: center;
+    z-index: 200; opacity: 0; pointer-events: none; transition: opacity 0.3s;
+  }
+  .anim-overlay.show { opacity: 1; pointer-events: all; }
+  .anim-canvas { width: 260px; height: 260px; }
+  .anim-message { color: white; font-family: 'DM Serif Display', serif; font-size: 1.6rem; margin-top: 1rem; text-align: center; }
+  .anim-sub { color: rgba(255,255,255,0.7); font-size: 0.85rem; margin-top: 0.3rem; }
+
+  /* MEDAL POPUP */
+  .medal-popup {
+    position: fixed; inset: 0; background: rgba(0,0,0,0.75);
+    display: flex; flex-direction: column; align-items: center; justify-content: center;
+    z-index: 300; opacity: 0; pointer-events: none; transition: opacity 0.4s;
+  }
+  .medal-popup.show { opacity: 1; pointer-events: all; }
+  .medal-big { font-size: 8rem; animation: medalDrop 0.6s cubic-bezier(0.34,1.56,0.64,1); }
+  .medal-popup-title { color: white; font-family: 'DM Serif Display', serif; font-size: 2rem; margin-top: 0.5rem; text-align: center; }
+  .medal-popup-sub { color: rgba(255,255,255,0.75); font-size: 0.9rem; margin-top: 0.3rem; }
+  .medal-tap { color: rgba(255,255,255,0.5); font-size: 0.75rem; margin-top: 1.5rem; }
+  @keyframes medalDrop { from { transform: scale(0) rotate(-20deg); opacity: 0; } to { transform: scale(1) rotate(0deg); opacity: 1; } }
+
+  /* TOAST */
+  .toast { position: fixed; bottom: calc(var(--safe-bottom) + 1.5rem); left: 50%; transform: translateX(-50%) translateY(100px); background: var(--accent); color: white; font-size: 0.82rem; font-weight: 600; padding: 0.6rem 1.2rem; border-radius: 20px; box-shadow: 0 4px 20px rgba(0,0,0,0.2); transition: transform 0.3s cubic-bezier(0.4,0,0.2,1); z-index: 100; white-space: nowrap; }
+  .toast.show { transform: translateX(-50%) translateY(0); }
+
+  /* RECOVERY POPUP */
+  .recovery-overlay {
+    position: fixed; inset: 0; background: rgba(0,0,0,0.6);
+    display: flex; align-items: center; justify-content: center;
+    z-index: 500; padding: 1.5rem;
+  }
+  .recovery-box {
+    background: white; border-radius: 16px; padding: 1.5rem;
+    max-width: 360px; width: 100%; box-shadow: 0 8px 32px rgba(0,0,0,0.2);
+  }
+  .recovery-box h2 { font-family: 'DM Serif Display', serif; font-size: 1.4rem; color: var(--accent); margin-bottom: 0.4rem; }
+  .recovery-box p { font-size: 0.82rem; color: var(--muted); margin-bottom: 1.2rem; line-height: 1.5; }
+  .recovery-row { display: flex; flex-direction: column; gap: 0.8rem; margin-bottom: 1.2rem; }
+  .recovery-row label { font-size: 0.78rem; font-weight: 600; color: var(--text); }
+  .recovery-row input[type=date] {
+    width: 100%; padding: 0.5rem 0.7rem; border: 1.5px solid var(--border);
+    border-radius: 8px; font-family: 'DM Sans', sans-serif; font-size: 0.85rem;
+    color: var(--text); margin-top: 0.2rem;
+  }
+  .recovery-btns { display: flex; gap: 0.7rem; }
+  .recovery-btn-primary {
+    flex: 1; background: var(--accent); color: white; border: none;
+    border-radius: 10px; padding: 0.65rem; font-family: 'DM Sans', sans-serif;
+    font-size: 0.85rem; font-weight: 600; cursor: pointer;
+  }
+  .recovery-btn-skip {
+    background: none; border: 1.5px solid var(--border); color: var(--muted);
+    border-radius: 10px; padding: 0.65rem 1rem; font-family: 'DM Sans', sans-serif;
+    font-size: 0.85rem; cursor: pointer;
+  }
+
+  /* INSTALL BANNER */
+  .install-banner { background: linear-gradient(135deg, #1b4332, #2d6a4f); color: white; border-radius: 14px; padding: 1rem 1.2rem; margin-bottom: 1.2rem; display: none; align-items: center; gap: 0.8rem; }
+  .install-banner.show { display: flex; }
+  .install-banner .install-text { flex: 1; }
+  .install-banner .install-text strong { font-size: 0.88rem; display: block; }
+  .install-banner .install-text span { font-size: 0.75rem; opacity: 0.85; }
+  .install-btn { background: white; color: var(--accent); border: none; font-family: 'DM Sans', sans-serif; font-size: 0.78rem; font-weight: 700; padding: 0.45rem 0.9rem; border-radius: 20px; cursor: pointer; white-space: nowrap; flex-shrink: 0; }
+  .dismiss-btn { background: none; border: none; color: rgba(255,255,255,0.6); font-size: 1.1rem; cursor: pointer; padding: 0.2rem; flex-shrink: 0; }
+</style>
+</head>
+<body>
+<div class="page">
+
+  <header>
+    <div class="header-top">
+      <div class="title-block">
+        <h1>Claudia's VKB <em>Revalidatie</em></h1>
+        <p>Operatie 3 februari 2025 · Dagschema fysiotherapie</p>
+      </div>
+      <div class="badge">Actief herstel</div>
+    </div>
+  </header>
+
+  <div class="install-banner" id="installBanner">
+    <div class="install-text"><strong>📱 Voeg toe aan thuisscherm</strong><span>Gebruik als app, ook offline</span></div>
+    <button class="install-btn" id="installBtn">Installeer</button>
+    <button class="dismiss-btn" id="dismissInstall">✕</button>
+  </div>
+
+  <!-- Recovery popup -->
+  <div class="recovery-overlay" id="recoveryOverlay" style="display:none">
+    <div class="recovery-box">
+      <h2>Welkom terug!</h2>
+      <p>Heb je al dagen behaald die nog niet in de app staan? Vul dan de periode in en die worden automatisch toegevoegd.</p>
+      <div class="recovery-row">
+        <label>Van<input type="date" id="recoveryFrom" value="2026-03-21"></label>
+        <label>Tot en met<input type="date" id="recoveryTo"></label>
+      </div>
+      <div class="recovery-btns">
+        <button class="recovery-btn-primary" onclick="applyRecovery()">Toevoegen</button>
+        <button class="recovery-btn-skip" onclick="skipRecovery()">Overslaan</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Progress -->
+  <div class="progress-wrap">
+    <div class="progress-top">
+      <span class="label">Voortgang vandaag</span>
+      <span class="pct" id="pct">0%</span>
+    </div>
+    <div class="bar-bg"><div class="bar-fill" id="barFill"></div></div>
+    <div class="progress-sub">
+      <span id="countLabel">0 van 0 afgevinkt</span>
+      <button class="reset-btn" id="resetBtn">↺ Reset dag</button>
+    </div>
+  </div>
+
+  <!-- Reeks voortgang -->
+  <div class="reeks-wrap">
+    <div class="reeks-title">Reeksen vandaag</div>
+    <div class="reeks-dots">
+      <div class="reeks-dot" id="rdot-0">1</div>
+      <div class="reeks-dot" id="rdot-1">2</div>
+      <div class="reeks-dot" id="rdot-2">3</div>
+      <div class="reeks-dot" id="rdot-3">4</div>
+      <div class="reeks-dot" id="rdot-4">5</div>
+      <span class="reeks-label" id="reeksLabel"></span>
+    </div>
+  </div>
+
+  <!-- Calendar -->
+  <div class="calendar-wrap">
+    <div class="calendar-title">🏅 Medailles</div>
+    <div id="calendarGrid"></div>
+  </div>
+
+  <p class="section-label">5 reeksen per dag — om de ~2,5 uur</p>
+
+  <!-- BLOK 1 -->
+  <div class="block block-1" id="block-0">
+    <div class="block-header" onclick="toggleBlock(0)">
+      <div class="block-header-left"><span class="time">09:30</span><span class="block-label">Reeks 1</span><span class="block-done-badge" id="badge-0">✓ Klaar</span></div>
+      <div class="block-progress"><span id="bprog-0">0/12</span><span class="chevron">▾</span></div>
+    </div>
+    <div class="exercise-list">
+      <div class="exercise-item" onclick="toggle(this)"><div class="check" data-id="0-0"></div><div class="ex-name">Ankle pump<span class="ex-sub">Enkelpomp · voet ritmisch op en neer</span></div><div class="ex-freq pump">20 - ∞</div></div>
+      <div class="exercise-item" onclick="toggle(this)"><div class="check" data-id="0-1"></div><div class="ex-name">Heel slide<span class="ex-sub">Hielglijden · buigen 120° → strekken met voetflex</span></div><div class="ex-freq">1 × 20</div></div>
+      <div class="exercise-item" onclick="toggle(this)"><div class="check" data-id="0-2"></div><div class="ex-name">Quad set<span class="ex-sub">Quadriceps activatie · knieholte in matras drukken</span></div><div class="ex-freq">1 × 20</div></div>
+      <div class="exercise-item" onclick="toggle(this)"><div class="check" data-id="0-3"></div><div class="ex-name">VMO-activatie<span class="ex-sub">Been licht naar buiten, binnenkant knie aantikken</span></div><div class="ex-freq">1 × 20</div></div>
+      <div class="exercise-item" onclick="toggle(this)"><div class="check" data-id="0-4"></div><div class="ex-name">Hip adduction<span class="ex-sub">Adductie zijlig · been naar binnen heffen</span></div><div class="ex-freq">1 × 20</div></div>
+      <div class="exercise-item" onclick="toggle(this)"><div class="check" data-id="0-5"></div><div class="ex-name">Hip abduction<span class="ex-sub">Abductie zijlig · been naar buiten heffen</span></div><div class="ex-freq">1 × 20</div></div>
+      <div class="exercise-item" onclick="toggle(this)"><div class="check" data-id="0-6"></div><div class="ex-name">Abdominal rollback<span class="ex-sub">Sit-back · excentrisch terugkantelen</span></div><div class="ex-freq">1 × 20</div></div>
+      <div class="exercise-item" onclick="toggle(this)"><div class="check" data-id="0-7"></div><div class="ex-name">Glute bridge<span class="ex-sub">Brug · bekken omhoog heffen</span></div><div class="ex-freq">1 × 20</div></div>
+      <div class="exercise-item" onclick="toggle(this)"><div class="check" data-id="0-8"></div><div class="ex-name">Adductor squeeze<span class="ex-sub">Adductoren knijp · kussen tussen knieën samenknijpen</span></div><div class="ex-freq">1 × 20</div></div>
+      <div class="exercise-item" onclick="toggle(this)"><div class="check" data-id="0-9"></div><div class="ex-name">Eccentric heel drop<span class="ex-sub">Kuitverlaging · 2 benen op traptrede</span></div><div class="ex-freq alt">3 × 10</div></div>
+      <div class="exercise-item" onclick="toggle(this)"><div class="check" data-id="0-10"></div><div class="ex-name">Seated knee extension<span class="ex-sub">Knie-extensie zit · bungelen op bedrand</span></div><div class="ex-freq alt">3 × 20</div></div>
+      <div class="exercise-item" onclick="toggle(this)"><div class="check" data-id="0-11"></div><div class="ex-name">Fietsen<span class="ex-sub">Hometrainer</span></div><div class="ex-freq alt">10 min</div></div>
+    </div>
+  </div>
+
+  <!-- BLOK 2 -->
+  <div class="block block-2" id="block-1">
+    <div class="block-header" onclick="toggleBlock(1)">
+      <div class="block-header-left"><span class="time">12:00</span><span class="block-label">Reeks 2</span><span class="block-done-badge" id="badge-1">✓ Klaar</span></div>
+      <div class="block-progress"><span id="bprog-1">0/10</span><span class="chevron">▾</span></div>
+    </div>
+    <div class="exercise-list">
+      <div class="exercise-item" onclick="toggle(this)"><div class="check" data-id="1-0"></div><div class="ex-name">Ankle pump<span class="ex-sub">Enkelpomp · voet ritmisch op en neer</span></div><div class="ex-freq pump">20 - ∞</div></div>
+      <div class="exercise-item" onclick="toggle(this)"><div class="check" data-id="1-1"></div><div class="ex-name">Heel slide<span class="ex-sub">Hielglijden · buigen 120° → strekken met voetflex</span></div><div class="ex-freq">1 × 20</div></div>
+      <div class="exercise-item" onclick="toggle(this)"><div class="check" data-id="1-2"></div><div class="ex-name">Quad set<span class="ex-sub">Quadriceps activatie · knieholte in matras drukken</span></div><div class="ex-freq">1 × 20</div></div>
+      <div class="exercise-item" onclick="toggle(this)"><div class="check" data-id="1-3"></div><div class="ex-name">VMO-activatie<span class="ex-sub">Been licht naar buiten, binnenkant knie aantikken</span></div><div class="ex-freq">1 × 20</div></div>
+      <div class="exercise-item" onclick="toggle(this)"><div class="check" data-id="1-4"></div><div class="ex-name">Hip adduction<span class="ex-sub">Adductie zijlig · been naar binnen heffen</span></div><div class="ex-freq">1 × 20</div></div>
+      <div class="exercise-item" onclick="toggle(this)"><div class="check" data-id="1-5"></div><div class="ex-name">Hip abduction<span class="ex-sub">Abductie zijlig · been naar buiten heffen</span></div><div class="ex-freq">1 × 20</div></div>
+      <div class="exercise-item" onclick="toggle(this)"><div class="check" data-id="1-6"></div><div class="ex-name">Abdominal rollback<span class="ex-sub">Sit-back · excentrisch terugkantelen</span></div><div class="ex-freq">1 × 20</div></div>
+      <div class="exercise-item" onclick="toggle(this)"><div class="check" data-id="1-7"></div><div class="ex-name">Glute bridge<span class="ex-sub">Brug · bekken omhoog heffen</span></div><div class="ex-freq">1 × 20</div></div>
+      <div class="exercise-item" onclick="toggle(this)"><div class="check" data-id="1-8"></div><div class="ex-name">Adductor squeeze<span class="ex-sub">Adductoren knijp · kussen tussen knieën samenknijpen</span></div><div class="ex-freq">1 × 20</div></div>
+      <div class="exercise-item" onclick="toggle(this)"><div class="check" data-id="1-9"></div><div class="ex-name">Seated knee extension<span class="ex-sub">Knie-extensie zit · bungelen op bedrand</span></div><div class="ex-freq alt">3 × 20</div></div>
+    </div>
+  </div>
+
+  <!-- BLOK 3 -->
+  <div class="block block-3" id="block-2">
+    <div class="block-header" onclick="toggleBlock(2)">
+      <div class="block-header-left"><span class="time">14:30</span><span class="block-label">Reeks 3</span><span class="block-done-badge" id="badge-2">✓ Klaar</span></div>
+      <div class="block-progress"><span id="bprog-2">0/12</span><span class="chevron">▾</span></div>
+    </div>
+    <div class="exercise-list">
+      <div class="exercise-item" onclick="toggle(this)"><div class="check" data-id="2-0"></div><div class="ex-name">Ankle pump<span class="ex-sub">Enkelpomp · voet ritmisch op en neer</span></div><div class="ex-freq pump">20 - ∞</div></div>
+      <div class="exercise-item" onclick="toggle(this)"><div class="check" data-id="2-1"></div><div class="ex-name">Heel slide<span class="ex-sub">Hielglijden · buigen 120° → strekken met voetflex</span></div><div class="ex-freq">1 × 20</div></div>
+      <div class="exercise-item" onclick="toggle(this)"><div class="check" data-id="2-2"></div><div class="ex-name">Quad set<span class="ex-sub">Quadriceps activatie · knieholte in matras drukken</span></div><div class="ex-freq">1 × 20</div></div>
+      <div class="exercise-item" onclick="toggle(this)"><div class="check" data-id="2-3"></div><div class="ex-name">VMO-activatie<span class="ex-sub">Been licht naar buiten, binnenkant knie aantikken</span></div><div class="ex-freq">1 × 20</div></div>
+      <div class="exercise-item" onclick="toggle(this)"><div class="check" data-id="2-4"></div><div class="ex-name">Hip adduction<span class="ex-sub">Adductie zijlig · been naar binnen heffen</span></div><div class="ex-freq">1 × 20</div></div>
+      <div class="exercise-item" onclick="toggle(this)"><div class="check" data-id="2-5"></div><div class="ex-name">Hip abduction<span class="ex-sub">Abductie zijlig · been naar buiten heffen</span></div><div class="ex-freq">1 × 20</div></div>
+      <div class="exercise-item" onclick="toggle(this)"><div class="check" data-id="2-6"></div><div class="ex-name">Abdominal rollback<span class="ex-sub">Sit-back · excentrisch terugkantelen</span></div><div class="ex-freq">1 × 20</div></div>
+      <div class="exercise-item" onclick="toggle(this)"><div class="check" data-id="2-7"></div><div class="ex-name">Glute bridge<span class="ex-sub">Brug · bekken omhoog heffen</span></div><div class="ex-freq">1 × 20</div></div>
+      <div class="exercise-item" onclick="toggle(this)"><div class="check" data-id="2-8"></div><div class="ex-name">Adductor squeeze<span class="ex-sub">Adductoren knijp · kussen tussen knieën samenknijpen</span></div><div class="ex-freq">1 × 20</div></div>
+      <div class="exercise-item" onclick="toggle(this)"><div class="check" data-id="2-9"></div><div class="ex-name">Eccentric heel drop<span class="ex-sub">Kuitverlaging · 2 benen op traptrede</span></div><div class="ex-freq alt">3 × 10</div></div>
+      <div class="exercise-item" onclick="toggle(this)"><div class="check" data-id="2-10"></div><div class="ex-name">Seated knee extension<span class="ex-sub">Knie-extensie zit · bungelen op bedrand</span></div><div class="ex-freq alt">3 × 20</div></div>
+      <div class="exercise-item" onclick="toggle(this)"><div class="check" data-id="2-11"></div><div class="ex-name">Fietsen<span class="ex-sub">Hometrainer</span></div><div class="ex-freq alt">10 min</div></div>
+    </div>
+  </div>
+
+  <!-- BLOK 4 -->
+  <div class="block block-4" id="block-3">
+    <div class="block-header" onclick="toggleBlock(3)">
+      <div class="block-header-left"><span class="time">17:00</span><span class="block-label">Reeks 4</span><span class="block-done-badge" id="badge-3">✓ Klaar</span></div>
+      <div class="block-progress"><span id="bprog-3">0/10</span><span class="chevron">▾</span></div>
+    </div>
+    <div class="exercise-list">
+      <div class="exercise-item" onclick="toggle(this)"><div class="check" data-id="3-0"></div><div class="ex-name">Ankle pump<span class="ex-sub">Enkelpomp · voet ritmisch op en neer</span></div><div class="ex-freq pump">20 - ∞</div></div>
+      <div class="exercise-item" onclick="toggle(this)"><div class="check" data-id="3-1"></div><div class="ex-name">Heel slide<span class="ex-sub">Hielglijden · buigen 120° → strekken met voetflex</span></div><div class="ex-freq">1 × 20</div></div>
+      <div class="exercise-item" onclick="toggle(this)"><div class="check" data-id="3-2"></div><div class="ex-name">Quad set<span class="ex-sub">Quadriceps activatie · knieholte in matras drukken</span></div><div class="ex-freq">1 × 20</div></div>
+      <div class="exercise-item" onclick="toggle(this)"><div class="check" data-id="3-3"></div><div class="ex-name">VMO-activatie<span class="ex-sub">Been licht naar buiten, binnenkant knie aantikken</span></div><div class="ex-freq">1 × 20</div></div>
+      <div class="exercise-item" onclick="toggle(this)"><div class="check" data-id="3-4"></div><div class="ex-name">Hip adduction<span class="ex-sub">Adductie zijlig · been naar binnen heffen</span></div><div class="ex-freq">1 × 20</div></div>
+      <div class="exercise-item" onclick="toggle(this)"><div class="check" data-id="3-5"></div><div class="ex-name">Hip abduction<span class="ex-sub">Abductie zijlig · been naar buiten heffen</span></div><div class="ex-freq">1 × 20</div></div>
+      <div class="exercise-item" onclick="toggle(this)"><div class="check" data-id="3-6"></div><div class="ex-name">Abdominal rollback<span class="ex-sub">Sit-back · excentrisch terugkantelen</span></div><div class="ex-freq">1 × 20</div></div>
+      <div class="exercise-item" onclick="toggle(this)"><div class="check" data-id="3-7"></div><div class="ex-name">Glute bridge<span class="ex-sub">Brug · bekken omhoog heffen</span></div><div class="ex-freq">1 × 20</div></div>
+      <div class="exercise-item" onclick="toggle(this)"><div class="check" data-id="3-8"></div><div class="ex-name">Adductor squeeze<span class="ex-sub">Adductoren knijp · kussen tussen knieën samenknijpen</span></div><div class="ex-freq">1 × 20</div></div>
+      <div class="exercise-item" onclick="toggle(this)"><div class="check" data-id="3-9"></div><div class="ex-name">Seated knee extension<span class="ex-sub">Knie-extensie zit · bungelen op bedrand</span></div><div class="ex-freq alt">3 × 20</div></div>
+    </div>
+  </div>
+
+  <!-- BLOK 5 -->
+  <div class="block block-5" id="block-4">
+    <div class="block-header" onclick="toggleBlock(4)">
+      <div class="block-header-left"><span class="time">19:30</span><span class="block-label">Reeks 5</span><span class="block-done-badge" id="badge-4">✓ Klaar</span></div>
+      <div class="block-progress"><span id="bprog-4">0/12</span><span class="chevron">▾</span></div>
+    </div>
+    <div class="exercise-list">
+      <div class="exercise-item" onclick="toggle(this)"><div class="check" data-id="4-0"></div><div class="ex-name">Ankle pump<span class="ex-sub">Enkelpomp · voet ritmisch op en neer</span></div><div class="ex-freq pump">20 - ∞</div></div>
+      <div class="exercise-item" onclick="toggle(this)"><div class="check" data-id="4-1"></div><div class="ex-name">Heel slide<span class="ex-sub">Hielglijden · buigen 120° → strekken met voetflex</span></div><div class="ex-freq">1 × 20</div></div>
+      <div class="exercise-item" onclick="toggle(this)"><div class="check" data-id="4-2"></div><div class="ex-name">Quad set<span class="ex-sub">Quadriceps activatie · knieholte in matras drukken</span></div><div class="ex-freq">1 × 20</div></div>
+      <div class="exercise-item" onclick="toggle(this)"><div class="check" data-id="4-3"></div><div class="ex-name">VMO-activatie<span class="ex-sub">Been licht naar buiten, binnenkant knie aantikken</span></div><div class="ex-freq">1 × 20</div></div>
+      <div class="exercise-item" onclick="toggle(this)"><div class="check" data-id="4-4"></div><div class="ex-name">Hip adduction<span class="ex-sub">Adductie zijlig · been naar binnen heffen</span></div><div class="ex-freq">1 × 20</div></div>
+      <div class="exercise-item" onclick="toggle(this)"><div class="check" data-id="4-5"></div><div class="ex-name">Hip abduction<span class="ex-sub">Abductie zijlig · been naar buiten heffen</span></div><div class="ex-freq">1 × 20</div></div>
+      <div class="exercise-item" onclick="toggle(this)"><div class="check" data-id="4-6"></div><div class="ex-name">Abdominal rollback<span class="ex-sub">Sit-back · excentrisch terugkantelen</span></div><div class="ex-freq">1 × 20</div></div>
+      <div class="exercise-item" onclick="toggle(this)"><div class="check" data-id="4-7"></div><div class="ex-name">Glute bridge<span class="ex-sub">Brug · bekken omhoog heffen</span></div><div class="ex-freq">1 × 20</div></div>
+      <div class="exercise-item" onclick="toggle(this)"><div class="check" data-id="4-8"></div><div class="ex-name">Adductor squeeze<span class="ex-sub">Adductoren knijp · kussen tussen knieën samenknijpen</span></div><div class="ex-freq">1 × 20</div></div>
+      <div class="exercise-item" onclick="toggle(this)"><div class="check" data-id="4-9"></div><div class="ex-name">Eccentric heel drop<span class="ex-sub">Kuitverlaging · 2 benen op traptrede</span></div><div class="ex-freq alt">3 × 10</div></div>
+      <div class="exercise-item" onclick="toggle(this)"><div class="check" data-id="4-10"></div><div class="ex-name">Seated knee extension<span class="ex-sub">Knie-extensie zit · bungelen op bedrand</span></div><div class="ex-freq alt">3 × 20</div></div>
+      <div class="exercise-item" onclick="toggle(this)"><div class="check" data-id="4-11"></div><div class="ex-name">Fietsen<span class="ex-sub">Hometrainer</span></div><div class="ex-freq alt">10 min</div></div>
+    </div>
+  </div>
+
+  <div class="legend">
+    <div class="legend-item"><div class="legend-dot" style="background:var(--accent)"></div> 1 × 20 herhalingen</div>
+    <div class="legend-item"><div class="legend-dot" style="background:#b07d00"></div> Afwijkende frequentie</div>
+    <div class="legend-item"><div class="legend-dot" style="background:#7a5c99"></div> Ankle pump: 20 - onbeperkt</div>
+  </div>
+
+  <footer>
+    VKB + meniscus reconstructie · 3 februari 2025<br>
+    Schema opgesteld in overleg met fysiotherapeut<br>
+    <span id="lastSaved" style="font-size:0.65rem;opacity:0.7;"></span>
+  </footer>
+</div>
+
+<!-- Animation overlay -->
+<div class="anim-overlay" id="animOverlay" onclick="closeAnim()">
+  <canvas class="anim-canvas" id="animCanvas" width="260" height="260"></canvas>
+  <div class="anim-message" id="animMessage">Reeks voltooid!</div>
+  <div class="anim-sub" id="animSub">Tik om verder te gaan</div>
+</div>
+
+<!-- Medal popup -->
+<div class="medal-popup" id="medalPopup" onclick="closeMedalPopup()">
+  <div class="medal-big" id="medalBig">🏅</div>
+  <div class="medal-popup-title" id="medalTitle">Dag voltooid!</div>
+  <div class="medal-popup-sub" id="medalSub">Alle 5 reeksen gedaan</div>
+  <div class="medal-tap">Tik om verder te gaan</div>
+</div>
+
+<div class="toast" id="toast"></div>
+
+<script>
+// ── MEDALS ──
+const MEDALS = [
+  { emoji: '🥇', name: 'Gouden Medaille', desc: 'Klassiek goud — de echte winnaar' },
+  { emoji: '🥈', name: 'Zilveren Medaille', desc: 'Sterk als staal' },
+  { emoji: '🥉', name: 'Bronzen Medaille', desc: 'Solide prestatie' },
+  { emoji: '🏆', name: 'Kampioenstrofee', desc: 'Topprestatie!' },
+  { emoji: '⭐', name: 'Gouden Ster', desc: 'Je schittert vandaag' },
+  { emoji: '💎', name: 'Diamant', desc: 'Onbreekbaar doorzettingsvermogen' },
+  { emoji: '⚡', name: 'Bliksem', desc: 'Razendsnel door de reeksen' },
+  { emoji: '🎯', name: 'Bullseye', desc: 'Precies op doel' },
+  { emoji: '🔥', name: 'On Fire', desc: 'Niet te stoppen vandaag' },
+  { emoji: '💪', name: 'Kracht', desc: 'Ijzersterke dag' },
+  { emoji: '🛡️', name: 'Schild', desc: 'Verdedigde je herstel' },
+  { emoji: '🚀', name: 'Raket', desc: 'Door het dak heen' },
+  { emoji: '👑', name: 'Kroon', desc: 'Koninklijke prestatie' },
+  { emoji: '🎖️', name: 'Militaire Medaille', desc: 'Discipline en doorzetting' },
+];
+
+function getMedalForDate(dateStr) {
+  // Deterministic medal per date
+  let hash = 0;
+  for (let c of dateStr) hash = (hash * 31 + c.charCodeAt(0)) & 0xffffffff;
+  return MEDALS[Math.abs(hash) % MEDALS.length];
+}
+
+// ── STORAGE ──
+const _nd = new Date();
+const TODAY = _nd.getFullYear() + '-' + String(_nd.getMonth()+1).padStart(2,'0') + '-' + String(_nd.getDate()).padStart(2,'0');
+const STORAGE_KEY = 'vkb_progress_' + TODAY;
+const BLOCK_STATE_KEY = 'vkb_blocks';
+const HISTORY_KEY = 'vkb_history';
+const START_DATE = '2026-03-21';
+
+let saved = {};
+try { saved = JSON.parse(localStorage.getItem(STORAGE_KEY) || '{}'); } catch(e) {}
+let blockState = {};
+try { blockState = JSON.parse(localStorage.getItem(BLOCK_STATE_KEY) || '{}'); } catch(e) {}
+let history = {};
+try { history = JSON.parse(localStorage.getItem(HISTORY_KEY) || '{}'); } catch(e) {}
+
+// Pre-seed past achieved days if not already set
+['2026-03-21','2026-03-22','2026-03-23'].forEach(d => {
+  if (d !== TODAY && !history[d]) {
+    history[d] = { done: true, medal: getMedalForDate(d) };
+  }
+});
+localStorage.setItem(HISTORY_KEY, JSON.stringify(history));
+
+// ── INIT ──
+document.querySelectorAll('.check').forEach(check => {
+  if (saved[check.dataset.id]) {
+    check.classList.add('done');
+    check.closest('.exercise-item').querySelector('.ex-name').classList.add('done-text');
+  }
+});
+for (let i = 0; i < 5; i++) {
+  if (blockState[i] === 'collapsed') document.getElementById('block-' + i).classList.add('collapsed');
+}
+
+let prevReeksDone = 0;
+
+updateAll();
+renderCalendar();
+
+// ── TOGGLE ──
+function toggle(item) {
+  const check = item.querySelector('.check');
+  check.classList.toggle('done');
+  item.querySelector('.ex-name').classList.toggle('done-text', check.classList.contains('done'));
+  saveState();
+  updateAll();
+}
+
+function toggleBlock(i) {
+  const block = document.getElementById('block-' + i);
+  block.classList.toggle('collapsed');
+  blockState[i] = block.classList.contains('collapsed') ? 'collapsed' : 'open';
+  localStorage.setItem(BLOCK_STATE_KEY, JSON.stringify(blockState));
+}
+
+function saveState() {
+  const state = {};
+  document.querySelectorAll('.check').forEach(c => { state[c.dataset.id] = c.classList.contains('done'); });
+  localStorage.setItem(STORAGE_KEY, JSON.stringify(state));
+  saved = state;
+  const now = new Date();
+  document.getElementById('lastSaved').textContent = 'Opgeslagen om ' + now.getHours().toString().padStart(2,'0') + ':' + now.getMinutes().toString().padStart(2,'0');
+}
+
+function updateAll() {
+  const all = document.querySelectorAll('.check');
+  const done = document.querySelectorAll('.check.done');
+  const pct = all.length ? Math.round((done.length / all.length) * 100) : 0;
+
+  document.getElementById('pct').textContent = pct + '%';
+  document.getElementById('countLabel').textContent = done.length + ' van ' + all.length + ' afgevinkt';
+  const bar = document.getElementById('barFill');
+  bar.style.width = pct + '%';
+
+  // Per reeks
+  let reeksDone = 0;
+  [0,1,2,3,4].forEach(i => {
+    const checks = document.querySelectorAll(`[data-id^="${i}-"]`);
+    const doneChecks = document.querySelectorAll(`[data-id^="${i}-"].done`);
+    document.getElementById('bprog-' + i).textContent = doneChecks.length + '/' + checks.length;
+    const badge = document.getElementById('badge-' + i);
+    const isComplete = doneChecks.length === checks.length && checks.length > 0;
+    if (isComplete) { badge.classList.add('visible'); reeksDone++; }
+    else badge.classList.remove('visible');
+    const dot = document.getElementById('rdot-' + i);
+    if (isComplete) dot.classList.add('done'); else dot.classList.remove('done');
+  });
+
+  // Check if new reeks just completed
+  if (reeksDone > prevReeksDone) {
+    const justDone = reeksDone;
+    if (justDone === 5) {
+      // Day complete!
+      setTimeout(() => showDayComplete(), 400);
+    } else {
+      setTimeout(() => showReeksAnim(justDone), 400);
+    }
+  }
+  prevReeksDone = reeksDone;
+
+  document.getElementById('reeksLabel').textContent = reeksDone > 0 ? reeksDone + ' van 5 klaar' : '';
+}
+
+// ── SOUND ──
+function playRewardSound(big = false) {
+  try {
+    const ctx = new (window.AudioContext || window.webkitAudioContext)();
+    const notes = big
+      ? [523, 659, 784, 1047]
+      : [523, 659, 784];
+    notes.forEach((freq, i) => {
+      const osc = ctx.createOscillator();
+      const gain = ctx.createGain();
+      osc.connect(gain); gain.connect(ctx.destination);
+      osc.type = 'sine';
+      osc.frequency.value = freq;
+      const t = ctx.currentTime + i * 0.12;
+      gain.gain.setValueAtTime(0, t);
+      gain.gain.linearRampToValueAtTime(0.3, t + 0.02);
+      gain.gain.exponentialRampToValueAtTime(0.001, t + 0.3);
+      osc.start(t); osc.stop(t + 0.35);
+    });
+  } catch(e) {}
+}
+
+function vibrate(pattern) {
+  if (navigator.vibrate) navigator.vibrate(pattern);
+}
+
+// ── BALL ANIMATION ──
+let animFrame;
+function showReeksAnim(reeksCount) {
+  playRewardSound(false);
+  vibrate([80, 40, 80]);
+  const overlay = document.getElementById('animOverlay');
+  const canvas = document.getElementById('animCanvas');
+  const ctx = canvas.getContext('2d');
+  document.getElementById('animMessage').textContent = 'Reeks ' + reeksCount + ' klaar!';
+  document.getElementById('animSub').textContent = 'Tik om verder te gaan';
+  overlay.classList.add('show');
+  runBallAnim(ctx, canvas, reeksCount, false);
+}
+
+function showDayComplete() {
+  const medal = getMedalForDate(TODAY);
+  // Save to history
+  history[TODAY] = { done: true, medal };
+  localStorage.setItem(HISTORY_KEY, JSON.stringify(history));
+
+  playRewardSound(true);
+  vibrate([100, 50, 100, 50, 200]);
+
+  // Show ball kick anim first
+  const overlay = document.getElementById('animOverlay');
+  const canvas = document.getElementById('animCanvas');
+  const ctx = canvas.getContext('2d');
+  document.getElementById('animMessage').textContent = 'Dag voltooid! 🎉';
+  document.getElementById('animSub').textContent = 'Tik om je medaille te zien';
+  overlay.classList.add('show');
+  runBallAnim(ctx, canvas, 5, true);
+  renderCalendar();
+}
+
+function runBallAnim(ctx, canvas, bounces, kick) {
+  cancelAnimationFrame(animFrame);
+  const W = canvas.width, H = canvas.height;
+
+  const kneeX = W * 0.5;
+  const kneeY = H * 0.62;
+  const ballR = 20;
+
+  let ballX = kneeX;
+  let ballY = kneeY - ballR - 60;
+  let ballVY = 0;
+  let ballVX = 0;
+  let ballRot = 0;
+  let bouncesShown = 0;
+  let kicked = false;
+  let done = false;
+  let phase = 0;
+
+  function drawBall(x, y, rot) {
+    ctx.save();
+    ctx.translate(x, y);
+    ctx.rotate(rot);
+    ctx.beginPath();
+    ctx.arc(0, 0, ballR, 0, Math.PI * 2);
+    ctx.fillStyle = '#f5f5f5';
+    ctx.fill();
+    ctx.strokeStyle = '#222';
+    ctx.lineWidth = 1.5;
+    ctx.stroke();
+    ctx.fillStyle = '#222';
+    ctx.beginPath();
+    ctx.arc(0, 0, ballR * 0.3, 0, Math.PI * 2);
+    ctx.fill();
+    for (let i = 0; i < 5; i++) {
+      const angle = (i / 5) * Math.PI * 2 - Math.PI / 2;
+      ctx.beginPath();
+      ctx.moveTo(Math.cos(angle) * ballR * 0.3, Math.sin(angle) * ballR * 0.3);
+      ctx.lineTo(Math.cos(angle) * ballR * 0.85, Math.sin(angle) * ballR * 0.85);
+      ctx.strokeStyle = '#444';
+      ctx.lineWidth = 1.5;
+      ctx.stroke();
+    }
+    ctx.restore();
+  }
+
+  function drawLegs(swingAngle) {
+    const hipY = H * 0.68;
+    const hipLX = W * 0.35;
+    const hipRX = W * 0.65;
+
+    ctx.fillStyle = '#2d6a4f';
+    ctx.beginPath();
+    if (ctx.roundRect) ctx.roundRect(hipLX - 10, hipY - 18, (hipRX - hipLX) + 20, 28, 6);
+    else ctx.rect(hipLX - 10, hipY - 18, (hipRX - hipLX) + 20, 28);
+    ctx.fill();
+
+    const leftKneeX = hipLX + 5, leftKneeY = hipY + 50;
+    const leftFootX = hipLX, leftFootY = hipY + 100;
+
+    ctx.strokeStyle = '#e8c99a';
+    ctx.lineWidth = 18;
+    ctx.lineCap = 'round';
+    ctx.beginPath(); ctx.moveTo(hipLX, hipY); ctx.lineTo(leftKneeX, leftKneeY); ctx.stroke();
+    ctx.beginPath(); ctx.moveTo(leftKneeX, leftKneeY); ctx.lineTo(leftFootX, leftFootY); ctx.stroke();
+    ctx.lineWidth = 14;
+    ctx.beginPath(); ctx.moveTo(leftFootX, leftFootY); ctx.lineTo(leftFootX - 18, leftFootY + 6); ctx.stroke();
+    ctx.strokeStyle = '#c0392b'; ctx.lineWidth = 5;
+    ctx.beginPath(); ctx.moveTo(leftFootX - 5, leftFootY - 12); ctx.lineTo(leftFootX - 5, leftFootY - 5); ctx.stroke();
+
+    const rightKneeX = hipRX - 5, rightKneeY = hipY + 45;
+    const shinLen = 55;
+    const rightFootX = rightKneeX + Math.sin(swingAngle) * shinLen;
+    const rightFootY = rightKneeY + Math.cos(swingAngle) * shinLen;
+
+    ctx.strokeStyle = '#e8c99a'; ctx.lineWidth = 18;
+    ctx.beginPath(); ctx.moveTo(hipRX, hipY); ctx.lineTo(rightKneeX, rightKneeY); ctx.stroke();
+    ctx.beginPath(); ctx.moveTo(rightKneeX, rightKneeY); ctx.lineTo(rightFootX, rightFootY); ctx.stroke();
+    ctx.lineWidth = 14; ctx.strokeStyle = '#d4a574';
+    ctx.beginPath(); ctx.moveTo(rightFootX, rightFootY);
+    ctx.lineTo(rightFootX + Math.cos(swingAngle - 0.3) * 20, rightFootY - Math.sin(swingAngle - 0.3) * 8); ctx.stroke();
+
+    ctx.fillStyle = '#d4a574';
+    ctx.beginPath(); ctx.arc(rightKneeX, rightKneeY, 9, 0, Math.PI * 2); ctx.fill();
+    ctx.beginPath(); ctx.arc(leftKneeX, leftKneeY, 9, 0, Math.PI * 2); ctx.fill();
+
+    return { rightFootX, rightFootY };
+  }
+
+  let legAngle = 0.2;
+
+  function animate() {
+    ctx.clearRect(0, 0, W, H);
+    phase += 0.05;
+
+    if (!kick) {
+      ballVY += 1.4; ballY += ballVY;
+      legAngle = Math.sin(phase * 1.5) * 0.25 + 0.2;
+      const { rightFootX, rightFootY } = drawLegs(legAngle);
+      drawBall(ballX, ballY, ballRot);
+      ballRot += ballVX * 0.05;
+      const dist = Math.sqrt((ballX - rightFootX) ** 2 + (ballY - rightFootY) ** 2);
+      if (dist < ballR + 12 && ballVY > 0) {
+        ballVY = -15; ballVX = (Math.random() - 0.5) * 2; bouncesShown++;
+        if (bouncesShown >= 4) done = true;
+      }
+      ballX += ballVX;
+      if (ballX < W * 0.3) ballVX += 0.3;
+      if (ballX > W * 0.7) ballVX -= 0.3;
+    } else {
+      if (!kicked && bouncesShown < 2) {
+        ballVY += 1.4; ballY += ballVY;
+        legAngle = Math.sin(phase * 1.5) * 0.2 + 0.2;
+        const { rightFootX, rightFootY } = drawLegs(legAngle);
+        drawBall(ballX, ballY, ballRot);
+        const dist = Math.sqrt((ballX - rightFootX) ** 2 + (ballY - rightFootY) ** 2);
+        if (dist < ballR + 12 && ballVY > 0) { ballVY = -15; ballVX = 0; bouncesShown++; }
+      } else if (!kicked) {
+        kicked = true; ballVY = -22; ballVX = 14; legAngle = -0.8;
+      }
+      if (kicked) {
+        legAngle = Math.min(legAngle + 0.06, 0.3);
+        drawLegs(legAngle);
+        ballVY += 0.6; ballY += ballVY; ballX += ballVX; ballRot += 0.25; ballVX *= 0.99;
+        drawBall(ballX, ballY, ballRot);
+        ctx.save();
+        for (let t = 1; t <= 4; t++) {
+          ctx.beginPath();
+          ctx.arc(ballX - ballVX * t * 1.2, ballY - ballVY * t * 0.3, ballR * (1 - t * 0.18), 0, Math.PI * 2);
+          ctx.fillStyle = `rgba(255,255,255,${0.08 - t * 0.015})`;
+          ctx.fill();
+        }
+        ctx.restore();
+        if (ballX > W + 50 || ballY > H + 50 || ballY < -50) done = true;
+      } else {
+        drawLegs(legAngle);
+        drawBall(ballX, ballY, ballRot);
+      }
+    }
+    if (!done) animFrame = requestAnimationFrame(animate);
+  }
+
+  ballY = kneeY - ballR - 70;
+  ballVY = 0;
+  animate();
+}
+
+function closeAnim() {
+  cancelAnimationFrame(animFrame);
+  document.getElementById('animOverlay').classList.remove('show');
+  // If day was complete, show medal popup
+  if (history[TODAY] && history[TODAY].done && prevReeksDone === 5) {
+    setTimeout(() => showMedalPopup(), 300);
+  }
+}
+
+function showMedalPopup() {
+  const medal = history[TODAY] ? history[TODAY].medal : getMedalForDate(TODAY);
+  document.getElementById('medalBig').textContent = medal.emoji;
+  document.getElementById('medalTitle').textContent = medal.name;
+  document.getElementById('medalSub').textContent = medal.desc;
+  document.getElementById('medalPopup').classList.add('show');
+  vibrate([50, 30, 50, 30, 100]);
+}
+
+function closeMedalPopup() {
+  document.getElementById('medalPopup').classList.remove('show');
+}
+
+// ── CALENDAR ──
+function renderCalendar() {
+  const grid = document.getElementById('calendarGrid');
+  const dayNames = ['Ma','Di','Wo','Do','Vr','Za','Zo'];
+
+  // Generate weeks from start date until today + a bit
+  const start = new Date(START_DATE);
+  // Go to Monday of start week
+  const startDay = start.getDay(); // 0=Sun
+  const daysToMon = startDay === 0 ? 6 : startDay - 1;
+  const weekStart = new Date(start);
+  weekStart.setDate(weekStart.getDate() - daysToMon);
+
+  const today = new Date(_nd.getFullYear(), _nd.getMonth(), _nd.getDate());
+  // Go to Sunday of today's week
+  const todayDay = today.getDay();
+  const daysToSun = todayDay === 0 ? 0 : 7 - todayDay;
+  const weekEnd = new Date(today);
+  weekEnd.setDate(weekEnd.getDate() + daysToSun);
+
+  let html = '';
+  let current = new Date(weekStart);
+  let weekNum = 1;
+
+  while (current <= weekEnd) {
+    const weekStartStr = current.toLocaleDateString('nl-NL', { day: 'numeric', month: 'short' });
+    const weekEndDate = new Date(current);
+    weekEndDate.setDate(weekEndDate.getDate() + 6);
+    const weekEndStr = weekEndDate.toLocaleDateString('nl-NL', { day: 'numeric', month: 'short' });
+    html += `<div class="week-block"><div class="week-label">Week ${weekNum} · ${weekStartStr} – ${weekEndStr}</div><div class="week-days">`;
+
+    for (let d = 0; d < 7; d++) {
+      const _cy = current.getFullYear(), _cm = String(current.getMonth()+1).padStart(2,'0'), _cd = String(current.getDate()).padStart(2,'0'); const dateStr = _cy + '-' + _cm + '-' + _cd;
+      const isToday = dateStr === TODAY;
+      const isFuture = current > today;
+      const beforeStart = current < start;
+      const entry = history[dateStr];
+      const achieved = entry && entry.done;
+      const medal = achieved ? entry.medal : null;
+
+      let classes = 'day-cell';
+      if (isToday) classes += ' today';
+      if (isFuture || beforeStart) classes += ' future';
+      if (achieved) classes += ' achieved';
+
+      const dayName = dayNames[d];
+      const dayNum = current.getDate();
+      const medalEmoji = achieved ? medal.emoji : (isFuture || beforeStart ? '' : '·');
+
+      html += `<div class="${classes}" title="${achieved && medal ? medal.name : ''}">
+        <span class="day-name">${dayName}</span>
+        <span class="day-medal">${medalEmoji}</span>
+        <span class="day-num">${dayNum}</span>
+      </div>`;
+
+      current.setDate(current.getDate() + 1);
+    }
+    html += '</div></div>';
+    weekNum++;
+  }
+
+  grid.innerHTML = html;
+}
+
+// ── RESET ──
+document.getElementById('resetBtn').addEventListener('click', () => {
+  if (confirm('Alle vinkjes van vandaag wissen?')) {
+    document.querySelectorAll('.check').forEach(c => c.classList.remove('done'));
+    document.querySelectorAll('.ex-name').forEach(n => n.classList.remove('done-text'));
+    localStorage.removeItem(STORAGE_KEY);
+    saved = {};
+    delete history[TODAY];
+    localStorage.setItem(HISTORY_KEY, JSON.stringify(history));
+    prevReeksDone = 0;
+    updateAll();
+    renderCalendar();
+    showToast('Reset gedaan — succes vandaag!');
+  }
+});
+
+// ── TOAST ──
+let toastTimer;
+function showToast(msg) {
+  const t = document.getElementById('toast');
+  t.textContent = msg;
+  t.classList.add('show');
+  clearTimeout(toastTimer);
+  toastTimer = setTimeout(() => t.classList.remove('show'), 3500);
+}
+
+// ── PWA INSTALL ──
+let deferredPrompt;
+window.addEventListener('beforeinstallprompt', e => {
+  e.preventDefault(); deferredPrompt = e;
+  if (!localStorage.getItem('installDismissed')) document.getElementById('installBanner').classList.add('show');
+});
+document.getElementById('installBtn').addEventListener('click', async () => {
+  if (deferredPrompt) { deferredPrompt.prompt(); await deferredPrompt.userChoice; deferredPrompt = null; document.getElementById('installBanner').classList.remove('show'); }
+});
+document.getElementById('dismissInstall').addEventListener('click', () => {
+  document.getElementById('installBanner').classList.remove('show');
+  localStorage.setItem('installDismissed', '1');
+});
+
+// ── SERVICE WORKER inline ──
+const swCode = `
+const CACHE='vkb-v2';
+const ASSETS=['./index.html'];
+self.addEventListener('install',e=>{e.waitUntil(caches.open(CACHE).then(c=>c.addAll(ASSETS)));self.skipWaiting();});
+self.addEventListener('activate',e=>{e.waitUntil(caches.keys().then(ks=>Promise.all(ks.filter(k=>k!==CACHE).map(k=>caches.delete(k)))));self.clients.claim();});
+self.addEventListener('fetch',e=>{e.respondWith(caches.match(e.request).then(r=>r||fetch(e.request)));});
+`;
+if ('serviceWorker' in navigator) {
+  const blob = new Blob([swCode], {type: 'application/javascript'});
+  const swUrl = URL.createObjectURL(blob);
+  navigator.serviceWorker.register(swUrl).catch(() => {});
+}
+
+// ── MIDNIGHT RESET ──
+setInterval(() => { const _mn = new Date(); const _md = _mn.getFullYear()+'-'+String(_mn.getMonth()+1).padStart(2,'0')+'-'+String(_mn.getDate()).padStart(2,'0'); if (_md !== TODAY) location.reload(); }, 60000);
+</script>
+</body>
+</html>
