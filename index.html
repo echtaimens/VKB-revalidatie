@@ -302,13 +302,11 @@ document.write('<link rel="manifest" href="' + manifestUrl + '">');
 
   <!-- Reeks voortgang -->
   <div class="reeks-wrap">
-    <div class="reeks-title">Reeksen vandaag</div>
+    <div class="reeks-title">Sessies vandaag</div>
     <div class="reeks-dots">
       <div class="reeks-dot" id="rdot-0">1</div>
       <div class="reeks-dot" id="rdot-1">2</div>
       <div class="reeks-dot" id="rdot-2">3</div>
-      <div class="reeks-dot" id="rdot-3">4</div>
-      <div class="reeks-dot" id="rdot-4">5</div>
       <span class="reeks-label" id="reeksLabel"></span>
     </div>
   </div>
@@ -319,118 +317,100 @@ document.write('<link rel="manifest" href="' + manifestUrl + '">');
     <div id="calendarGrid"></div>
   </div>
 
-  <p class="section-label">5 reeksen per dag — om de ~2,5 uur</p>
+  <p class="section-label">3 sessies per dag — 10:00 · 14:30 · 19:00</p>
 
-  <!-- BLOK 1 -->
+  <!-- SESSIE 1 -->
   <div class="block block-1" id="block-0">
     <div class="block-header" onclick="toggleBlock(0)">
-      <div class="block-header-left"><span class="time">09:30</span><span class="block-label">Reeks 1</span><span class="block-done-badge" id="badge-0">✓ Klaar</span></div>
+      <div class="block-header-left"><span class="time">10:00</span><span class="block-label">Sessie 1</span><span class="block-done-badge" id="badge-0">✓ Klaar</span></div>
       <div class="block-progress"><span id="bprog-0">0/12</span><span class="chevron">▾</span></div>
     </div>
     <div class="exercise-list">
-      <div class="exercise-item" onclick="toggle(this)"><div class="check" data-id="0-0"></div><div class="ex-name">Ankle pump<span class="ex-sub">Enkelpomp · voet ritmisch op en neer</span></div><div class="ex-freq pump">20 - ∞</div></div>
-      <div class="exercise-item" onclick="toggle(this)"><div class="check" data-id="0-1"></div><div class="ex-name">Heel slide<span class="ex-sub">Hielglijden · buigen 120° → strekken met voetflex</span></div><div class="ex-freq">1 × 20</div></div>
-      <div class="exercise-item" onclick="toggle(this)"><div class="check" data-id="0-2"></div><div class="ex-name">Quad set<span class="ex-sub">Quadriceps activatie · knieholte in matras drukken</span></div><div class="ex-freq">1 × 20</div></div>
-      <div class="exercise-item" onclick="toggle(this)"><div class="check" data-id="0-3"></div><div class="ex-name">VMO-activatie<span class="ex-sub">Been licht naar buiten, binnenkant knie aantikken</span></div><div class="ex-freq">1 × 20</div></div>
-      <div class="exercise-item" onclick="toggle(this)"><div class="check" data-id="0-4"></div><div class="ex-name">Hip adduction<span class="ex-sub">Adductie zijlig · been naar binnen heffen</span></div><div class="ex-freq">1 × 20</div></div>
-      <div class="exercise-item" onclick="toggle(this)"><div class="check" data-id="0-5"></div><div class="ex-name">Hip abduction<span class="ex-sub">Abductie zijlig · been naar buiten heffen</span></div><div class="ex-freq">1 × 20</div></div>
+      <div class="exercise-item" onclick="toggle(this)"><div class="check" data-id="0-0"></div><div class="ex-name">Fietsen<span class="ex-sub">Hometrainer</span></div><div class="ex-freq alt">10 min</div></div>
+      <div class="exercise-item" onclick="toggle(this)"><div class="check" data-id="0-1"></div><div class="ex-name">Quad set<span class="ex-sub">Quadriceps activatie · knieholte in matras drukken</span></div><div class="ex-freq">1 × 20</div></div>
+      <div class="exercise-item" onclick="toggle(this)"><div class="check" data-id="0-2"></div><div class="ex-name">VMO-activatie<span class="ex-sub">Been licht naar buiten, binnenkant knie aantikken</span></div><div class="ex-freq">1 × 20</div></div>
+      <div class="exercise-item" onclick="toggle(this)"><div class="check" data-id="0-3"></div><div class="ex-name">Hip adduction<span class="ex-sub">Adductie zijlig · been naar binnen heffen</span></div><div class="ex-freq">1 × 20</div></div>
+      <div class="exercise-item" onclick="toggle(this)"><div class="check" data-id="0-4"></div><div class="ex-name">Hip abduction<span class="ex-sub">Abductie zijlig · been naar buiten heffen</span></div><div class="ex-freq">1 × 20</div></div>
+      <div class="exercise-item" onclick="toggle(this)"><div class="check" data-id="0-5"></div><div class="ex-name">Glute bridge<span class="ex-sub">Brug · bekken omhoog heffen</span></div><div class="ex-freq">1 × 20</div></div>
       <div class="exercise-item" onclick="toggle(this)"><div class="check" data-id="0-6"></div><div class="ex-name">Abdominal rollback<span class="ex-sub">Sit-back · excentrisch terugkantelen</span></div><div class="ex-freq">1 × 20</div></div>
-      <div class="exercise-item" onclick="toggle(this)"><div class="check" data-id="0-7"></div><div class="ex-name">Glute bridge<span class="ex-sub">Brug · bekken omhoog heffen</span></div><div class="ex-freq">1 × 20</div></div>
-      <div class="exercise-item" onclick="toggle(this)"><div class="check" data-id="0-8"></div><div class="ex-name">Adductor squeeze<span class="ex-sub">Adductoren knijp · kussen tussen knieën samenknijpen</span></div><div class="ex-freq">1 × 20</div></div>
+      <div class="exercise-item" onclick="toggle(this)"><div class="check" data-id="0-7"></div><div class="ex-name">Adductor squeeze<span class="ex-sub">Adductoren knijp · kussen tussen knieën samenknijpen</span></div><div class="ex-freq">1 × 20</div></div>
+      <div class="exercise-item" onclick="toggle(this)"><div class="check" data-id="0-8"></div><div class="ex-name">Seated knee extension<span class="ex-sub">Knie-extensie zit · bungelen op bedrand</span></div><div class="ex-freq alt">3 × 20</div></div>
       <div class="exercise-item" onclick="toggle(this)"><div class="check" data-id="0-9"></div><div class="ex-name">Eccentric heel drop<span class="ex-sub">Kuitverlaging · 2 benen op traptrede</span></div><div class="ex-freq alt">3 × 10</div></div>
-      <div class="exercise-item" onclick="toggle(this)"><div class="check" data-id="0-10"></div><div class="ex-name">Seated knee extension<span class="ex-sub">Knie-extensie zit · bungelen op bedrand</span></div><div class="ex-freq alt">3 × 20</div></div>
-      <div class="exercise-item" onclick="toggle(this)"><div class="check" data-id="0-11"></div><div class="ex-name">Fietsen<span class="ex-sub">Hometrainer</span></div><div class="ex-freq alt">10 min</div></div>
+      <div class="exercise-item" onclick="toggle(this)"><div class="check" data-id="0-10"></div><div class="ex-name">Lifted knee steps</div><div class="ex-freq">1 × 20</div></div>
+      <div class="exercise-item" onclick="toggle(this)"><div class="check" data-id="0-11"></div><div class="ex-name">Elevated glute bridge plank<span class="ex-sub">Hielen op verhoging · omgekeerde plank op rug</span></div><div class="ex-freq alt">3 × 1 min</div></div>
     </div>
   </div>
 
-  <!-- BLOK 2 -->
+  <!-- SESSIE 2 -->
   <div class="block block-2" id="block-1">
     <div class="block-header" onclick="toggleBlock(1)">
-      <div class="block-header-left"><span class="time">12:00</span><span class="block-label">Reeks 2</span><span class="block-done-badge" id="badge-1">✓ Klaar</span></div>
-      <div class="block-progress"><span id="bprog-1">0/10</span><span class="chevron">▾</span></div>
+      <div class="block-header-left"><span class="time">14:30</span><span class="block-label">Sessie 2</span><span class="block-done-badge" id="badge-1">✓ Klaar</span></div>
+      <div class="block-progress"><span id="bprog-1">0/12</span><span class="chevron">▾</span></div>
     </div>
     <div class="exercise-list">
-      <div class="exercise-item" onclick="toggle(this)"><div class="check" data-id="1-0"></div><div class="ex-name">Ankle pump<span class="ex-sub">Enkelpomp · voet ritmisch op en neer</span></div><div class="ex-freq pump">20 - ∞</div></div>
-      <div class="exercise-item" onclick="toggle(this)"><div class="check" data-id="1-1"></div><div class="ex-name">Heel slide<span class="ex-sub">Hielglijden · buigen 120° → strekken met voetflex</span></div><div class="ex-freq">1 × 20</div></div>
-      <div class="exercise-item" onclick="toggle(this)"><div class="check" data-id="1-2"></div><div class="ex-name">Quad set<span class="ex-sub">Quadriceps activatie · knieholte in matras drukken</span></div><div class="ex-freq">1 × 20</div></div>
-      <div class="exercise-item" onclick="toggle(this)"><div class="check" data-id="1-3"></div><div class="ex-name">VMO-activatie<span class="ex-sub">Been licht naar buiten, binnenkant knie aantikken</span></div><div class="ex-freq">1 × 20</div></div>
-      <div class="exercise-item" onclick="toggle(this)"><div class="check" data-id="1-4"></div><div class="ex-name">Hip adduction<span class="ex-sub">Adductie zijlig · been naar binnen heffen</span></div><div class="ex-freq">1 × 20</div></div>
-      <div class="exercise-item" onclick="toggle(this)"><div class="check" data-id="1-5"></div><div class="ex-name">Hip abduction<span class="ex-sub">Abductie zijlig · been naar buiten heffen</span></div><div class="ex-freq">1 × 20</div></div>
+      <div class="exercise-item" onclick="toggle(this)"><div class="check" data-id="1-0"></div><div class="ex-name">Fietsen<span class="ex-sub">Hometrainer</span></div><div class="ex-freq alt">10 min</div></div>
+      <div class="exercise-item" onclick="toggle(this)"><div class="check" data-id="1-1"></div><div class="ex-name">Quad set<span class="ex-sub">Quadriceps activatie · knieholte in matras drukken</span></div><div class="ex-freq">1 × 20</div></div>
+      <div class="exercise-item" onclick="toggle(this)"><div class="check" data-id="1-2"></div><div class="ex-name">VMO-activatie<span class="ex-sub">Been licht naar buiten, binnenkant knie aantikken</span></div><div class="ex-freq">1 × 20</div></div>
+      <div class="exercise-item" onclick="toggle(this)"><div class="check" data-id="1-3"></div><div class="ex-name">Hip adduction<span class="ex-sub">Adductie zijlig · been naar binnen heffen</span></div><div class="ex-freq">1 × 20</div></div>
+      <div class="exercise-item" onclick="toggle(this)"><div class="check" data-id="1-4"></div><div class="ex-name">Hip abduction<span class="ex-sub">Abductie zijlig · been naar buiten heffen</span></div><div class="ex-freq">1 × 20</div></div>
+      <div class="exercise-item" onclick="toggle(this)"><div class="check" data-id="1-5"></div><div class="ex-name">Glute bridge<span class="ex-sub">Brug · bekken omhoog heffen</span></div><div class="ex-freq">1 × 20</div></div>
       <div class="exercise-item" onclick="toggle(this)"><div class="check" data-id="1-6"></div><div class="ex-name">Abdominal rollback<span class="ex-sub">Sit-back · excentrisch terugkantelen</span></div><div class="ex-freq">1 × 20</div></div>
-      <div class="exercise-item" onclick="toggle(this)"><div class="check" data-id="1-7"></div><div class="ex-name">Glute bridge<span class="ex-sub">Brug · bekken omhoog heffen</span></div><div class="ex-freq">1 × 20</div></div>
-      <div class="exercise-item" onclick="toggle(this)"><div class="check" data-id="1-8"></div><div class="ex-name">Adductor squeeze<span class="ex-sub">Adductoren knijp · kussen tussen knieën samenknijpen</span></div><div class="ex-freq">1 × 20</div></div>
-      <div class="exercise-item" onclick="toggle(this)"><div class="check" data-id="1-9"></div><div class="ex-name">Seated knee extension<span class="ex-sub">Knie-extensie zit · bungelen op bedrand</span></div><div class="ex-freq alt">3 × 20</div></div>
+      <div class="exercise-item" onclick="toggle(this)"><div class="check" data-id="1-7"></div><div class="ex-name">Adductor squeeze<span class="ex-sub">Adductoren knijp · kussen tussen knieën samenknijpen</span></div><div class="ex-freq">1 × 20</div></div>
+      <div class="exercise-item" onclick="toggle(this)"><div class="check" data-id="1-8"></div><div class="ex-name">Seated knee extension<span class="ex-sub">Knie-extensie zit · bungelen op bedrand</span></div><div class="ex-freq alt">3 × 20</div></div>
+      <div class="exercise-item" onclick="toggle(this)"><div class="check" data-id="1-9"></div><div class="ex-name">Eccentric heel drop<span class="ex-sub">Kuitverlaging · 2 benen op traptrede</span></div><div class="ex-freq alt">3 × 10</div></div>
+      <div class="exercise-item" onclick="toggle(this)"><div class="check" data-id="1-10"></div><div class="ex-name">Lifted knee steps</div><div class="ex-freq">1 × 20</div></div>
+      <div class="exercise-item" onclick="toggle(this)"><div class="check" data-id="1-11"></div><div class="ex-name">Elevated glute bridge plank<span class="ex-sub">Hielen op verhoging · omgekeerde plank op rug</span></div><div class="ex-freq alt">3 × 1 min</div></div>
     </div>
   </div>
 
-  <!-- BLOK 3 -->
+  <!-- SESSIE 3 -->
   <div class="block block-3" id="block-2">
     <div class="block-header" onclick="toggleBlock(2)">
-      <div class="block-header-left"><span class="time">14:30</span><span class="block-label">Reeks 3</span><span class="block-done-badge" id="badge-2">✓ Klaar</span></div>
+      <div class="block-header-left"><span class="time">19:00</span><span class="block-label">Sessie 3</span><span class="block-done-badge" id="badge-2">✓ Klaar</span></div>
       <div class="block-progress"><span id="bprog-2">0/12</span><span class="chevron">▾</span></div>
     </div>
     <div class="exercise-list">
-      <div class="exercise-item" onclick="toggle(this)"><div class="check" data-id="2-0"></div><div class="ex-name">Ankle pump<span class="ex-sub">Enkelpomp · voet ritmisch op en neer</span></div><div class="ex-freq pump">20 - ∞</div></div>
-      <div class="exercise-item" onclick="toggle(this)"><div class="check" data-id="2-1"></div><div class="ex-name">Heel slide<span class="ex-sub">Hielglijden · buigen 120° → strekken met voetflex</span></div><div class="ex-freq">1 × 20</div></div>
-      <div class="exercise-item" onclick="toggle(this)"><div class="check" data-id="2-2"></div><div class="ex-name">Quad set<span class="ex-sub">Quadriceps activatie · knieholte in matras drukken</span></div><div class="ex-freq">1 × 20</div></div>
-      <div class="exercise-item" onclick="toggle(this)"><div class="check" data-id="2-3"></div><div class="ex-name">VMO-activatie<span class="ex-sub">Been licht naar buiten, binnenkant knie aantikken</span></div><div class="ex-freq">1 × 20</div></div>
-      <div class="exercise-item" onclick="toggle(this)"><div class="check" data-id="2-4"></div><div class="ex-name">Hip adduction<span class="ex-sub">Adductie zijlig · been naar binnen heffen</span></div><div class="ex-freq">1 × 20</div></div>
-      <div class="exercise-item" onclick="toggle(this)"><div class="check" data-id="2-5"></div><div class="ex-name">Hip abduction<span class="ex-sub">Abductie zijlig · been naar buiten heffen</span></div><div class="ex-freq">1 × 20</div></div>
+      <div class="exercise-item" onclick="toggle(this)"><div class="check" data-id="2-0"></div><div class="ex-name">Fietsen<span class="ex-sub">Hometrainer</span></div><div class="ex-freq alt">10 min</div></div>
+      <div class="exercise-item" onclick="toggle(this)"><div class="check" data-id="2-1"></div><div class="ex-name">Quad set<span class="ex-sub">Quadriceps activatie · knieholte in matras drukken</span></div><div class="ex-freq">1 × 20</div></div>
+      <div class="exercise-item" onclick="toggle(this)"><div class="check" data-id="2-2"></div><div class="ex-name">VMO-activatie<span class="ex-sub">Been licht naar buiten, binnenkant knie aantikken</span></div><div class="ex-freq">1 × 20</div></div>
+      <div class="exercise-item" onclick="toggle(this)"><div class="check" data-id="2-3"></div><div class="ex-name">Hip adduction<span class="ex-sub">Adductie zijlig · been naar binnen heffen</span></div><div class="ex-freq">1 × 20</div></div>
+      <div class="exercise-item" onclick="toggle(this)"><div class="check" data-id="2-4"></div><div class="ex-name">Hip abduction<span class="ex-sub">Abductie zijlig · been naar buiten heffen</span></div><div class="ex-freq">1 × 20</div></div>
+      <div class="exercise-item" onclick="toggle(this)"><div class="check" data-id="2-5"></div><div class="ex-name">Glute bridge<span class="ex-sub">Brug · bekken omhoog heffen</span></div><div class="ex-freq">1 × 20</div></div>
       <div class="exercise-item" onclick="toggle(this)"><div class="check" data-id="2-6"></div><div class="ex-name">Abdominal rollback<span class="ex-sub">Sit-back · excentrisch terugkantelen</span></div><div class="ex-freq">1 × 20</div></div>
-      <div class="exercise-item" onclick="toggle(this)"><div class="check" data-id="2-7"></div><div class="ex-name">Glute bridge<span class="ex-sub">Brug · bekken omhoog heffen</span></div><div class="ex-freq">1 × 20</div></div>
-      <div class="exercise-item" onclick="toggle(this)"><div class="check" data-id="2-8"></div><div class="ex-name">Adductor squeeze<span class="ex-sub">Adductoren knijp · kussen tussen knieën samenknijpen</span></div><div class="ex-freq">1 × 20</div></div>
+      <div class="exercise-item" onclick="toggle(this)"><div class="check" data-id="2-7"></div><div class="ex-name">Adductor squeeze<span class="ex-sub">Adductoren knijp · kussen tussen knieën samenknijpen</span></div><div class="ex-freq">1 × 20</div></div>
+      <div class="exercise-item" onclick="toggle(this)"><div class="check" data-id="2-8"></div><div class="ex-name">Seated knee extension<span class="ex-sub">Knie-extensie zit · bungelen op bedrand</span></div><div class="ex-freq alt">3 × 20</div></div>
       <div class="exercise-item" onclick="toggle(this)"><div class="check" data-id="2-9"></div><div class="ex-name">Eccentric heel drop<span class="ex-sub">Kuitverlaging · 2 benen op traptrede</span></div><div class="ex-freq alt">3 × 10</div></div>
-      <div class="exercise-item" onclick="toggle(this)"><div class="check" data-id="2-10"></div><div class="ex-name">Seated knee extension<span class="ex-sub">Knie-extensie zit · bungelen op bedrand</span></div><div class="ex-freq alt">3 × 20</div></div>
-      <div class="exercise-item" onclick="toggle(this)"><div class="check" data-id="2-11"></div><div class="ex-name">Fietsen<span class="ex-sub">Hometrainer</span></div><div class="ex-freq alt">10 min</div></div>
-    </div>
-  </div>
-
-  <!-- BLOK 4 -->
-  <div class="block block-4" id="block-3">
-    <div class="block-header" onclick="toggleBlock(3)">
-      <div class="block-header-left"><span class="time">17:00</span><span class="block-label">Reeks 4</span><span class="block-done-badge" id="badge-3">✓ Klaar</span></div>
-      <div class="block-progress"><span id="bprog-3">0/10</span><span class="chevron">▾</span></div>
-    </div>
-    <div class="exercise-list">
-      <div class="exercise-item" onclick="toggle(this)"><div class="check" data-id="3-0"></div><div class="ex-name">Ankle pump<span class="ex-sub">Enkelpomp · voet ritmisch op en neer</span></div><div class="ex-freq pump">20 - ∞</div></div>
-      <div class="exercise-item" onclick="toggle(this)"><div class="check" data-id="3-1"></div><div class="ex-name">Heel slide<span class="ex-sub">Hielglijden · buigen 120° → strekken met voetflex</span></div><div class="ex-freq">1 × 20</div></div>
-      <div class="exercise-item" onclick="toggle(this)"><div class="check" data-id="3-2"></div><div class="ex-name">Quad set<span class="ex-sub">Quadriceps activatie · knieholte in matras drukken</span></div><div class="ex-freq">1 × 20</div></div>
-      <div class="exercise-item" onclick="toggle(this)"><div class="check" data-id="3-3"></div><div class="ex-name">VMO-activatie<span class="ex-sub">Been licht naar buiten, binnenkant knie aantikken</span></div><div class="ex-freq">1 × 20</div></div>
-      <div class="exercise-item" onclick="toggle(this)"><div class="check" data-id="3-4"></div><div class="ex-name">Hip adduction<span class="ex-sub">Adductie zijlig · been naar binnen heffen</span></div><div class="ex-freq">1 × 20</div></div>
-      <div class="exercise-item" onclick="toggle(this)"><div class="check" data-id="3-5"></div><div class="ex-name">Hip abduction<span class="ex-sub">Abductie zijlig · been naar buiten heffen</span></div><div class="ex-freq">1 × 20</div></div>
-      <div class="exercise-item" onclick="toggle(this)"><div class="check" data-id="3-6"></div><div class="ex-name">Abdominal rollback<span class="ex-sub">Sit-back · excentrisch terugkantelen</span></div><div class="ex-freq">1 × 20</div></div>
-      <div class="exercise-item" onclick="toggle(this)"><div class="check" data-id="3-7"></div><div class="ex-name">Glute bridge<span class="ex-sub">Brug · bekken omhoog heffen</span></div><div class="ex-freq">1 × 20</div></div>
-      <div class="exercise-item" onclick="toggle(this)"><div class="check" data-id="3-8"></div><div class="ex-name">Adductor squeeze<span class="ex-sub">Adductoren knijp · kussen tussen knieën samenknijpen</span></div><div class="ex-freq">1 × 20</div></div>
-      <div class="exercise-item" onclick="toggle(this)"><div class="check" data-id="3-9"></div><div class="ex-name">Seated knee extension<span class="ex-sub">Knie-extensie zit · bungelen op bedrand</span></div><div class="ex-freq alt">3 × 20</div></div>
-    </div>
-  </div>
-
-  <!-- BLOK 5 -->
-  <div class="block block-5" id="block-4">
-    <div class="block-header" onclick="toggleBlock(4)">
-      <div class="block-header-left"><span class="time">19:30</span><span class="block-label">Reeks 5</span><span class="block-done-badge" id="badge-4">✓ Klaar</span></div>
-      <div class="block-progress"><span id="bprog-4">0/12</span><span class="chevron">▾</span></div>
-    </div>
-    <div class="exercise-list">
-      <div class="exercise-item" onclick="toggle(this)"><div class="check" data-id="4-0"></div><div class="ex-name">Ankle pump<span class="ex-sub">Enkelpomp · voet ritmisch op en neer</span></div><div class="ex-freq pump">20 - ∞</div></div>
-      <div class="exercise-item" onclick="toggle(this)"><div class="check" data-id="4-1"></div><div class="ex-name">Heel slide<span class="ex-sub">Hielglijden · buigen 120° → strekken met voetflex</span></div><div class="ex-freq">1 × 20</div></div>
-      <div class="exercise-item" onclick="toggle(this)"><div class="check" data-id="4-2"></div><div class="ex-name">Quad set<span class="ex-sub">Quadriceps activatie · knieholte in matras drukken</span></div><div class="ex-freq">1 × 20</div></div>
-      <div class="exercise-item" onclick="toggle(this)"><div class="check" data-id="4-3"></div><div class="ex-name">VMO-activatie<span class="ex-sub">Been licht naar buiten, binnenkant knie aantikken</span></div><div class="ex-freq">1 × 20</div></div>
-      <div class="exercise-item" onclick="toggle(this)"><div class="check" data-id="4-4"></div><div class="ex-name">Hip adduction<span class="ex-sub">Adductie zijlig · been naar binnen heffen</span></div><div class="ex-freq">1 × 20</div></div>
-      <div class="exercise-item" onclick="toggle(this)"><div class="check" data-id="4-5"></div><div class="ex-name">Hip abduction<span class="ex-sub">Abductie zijlig · been naar buiten heffen</span></div><div class="ex-freq">1 × 20</div></div>
-      <div class="exercise-item" onclick="toggle(this)"><div class="check" data-id="4-6"></div><div class="ex-name">Abdominal rollback<span class="ex-sub">Sit-back · excentrisch terugkantelen</span></div><div class="ex-freq">1 × 20</div></div>
-      <div class="exercise-item" onclick="toggle(this)"><div class="check" data-id="4-7"></div><div class="ex-name">Glute bridge<span class="ex-sub">Brug · bekken omhoog heffen</span></div><div class="ex-freq">1 × 20</div></div>
-      <div class="exercise-item" onclick="toggle(this)"><div class="check" data-id="4-8"></div><div class="ex-name">Adductor squeeze<span class="ex-sub">Adductoren knijp · kussen tussen knieën samenknijpen</span></div><div class="ex-freq">1 × 20</div></div>
-      <div class="exercise-item" onclick="toggle(this)"><div class="check" data-id="4-9"></div><div class="ex-name">Eccentric heel drop<span class="ex-sub">Kuitverlaging · 2 benen op traptrede</span></div><div class="ex-freq alt">3 × 10</div></div>
-      <div class="exercise-item" onclick="toggle(this)"><div class="check" data-id="4-10"></div><div class="ex-name">Seated knee extension<span class="ex-sub">Knie-extensie zit · bungelen op bedrand</span></div><div class="ex-freq alt">3 × 20</div></div>
-      <div class="exercise-item" onclick="toggle(this)"><div class="check" data-id="4-11"></div><div class="ex-name">Fietsen<span class="ex-sub">Hometrainer</span></div><div class="ex-freq alt">10 min</div></div>
+      <div class="exercise-item" onclick="toggle(this)"><div class="check" data-id="2-10"></div><div class="ex-name">Lifted knee steps</div><div class="ex-freq">1 × 20</div></div>
+      <div class="exercise-item" onclick="toggle(this)"><div class="check" data-id="2-11"></div><div class="ex-name">Elevated glute bridge plank<span class="ex-sub">Hielen op verhoging · omgekeerde plank op rug</span></div><div class="ex-freq alt">3 × 1 min</div></div>
     </div>
   </div>
 
   <div class="legend">
     <div class="legend-item"><div class="legend-dot" style="background:var(--accent)"></div> 1 × 20 herhalingen</div>
     <div class="legend-item"><div class="legend-dot" style="background:#b07d00"></div> Afwijkende frequentie</div>
-    <div class="legend-item"><div class="legend-dot" style="background:#7a5c99"></div> Ankle pump: 20 - onbeperkt</div>
+  </div>
+
+  <!-- FASE 1 HISTORIE -->
+  <p class="section-label" style="margin-top:2rem">📋 Fase 1 — 3 feb t/m 28 mrt 2026</p>
+  <div class="block block-4 collapsed" id="fase1-block">
+    <div class="block-header" onclick="this.closest('.block').classList.toggle('collapsed')">
+      <div class="block-header-left"><span class="block-label" style="font-size:0.8rem">Oefeningen fase 1 (tik om te bekijken)</span></div>
+      <div class="block-progress"><span class="chevron">▾</span></div>
+    </div>
+    <div class="exercise-list">
+      <div class="exercise-item"><div class="ex-name">Ankle pump<span class="ex-sub">Enkelpomp · voet ritmisch op en neer</span></div><div class="ex-freq pump">20 - ∞</div></div>
+      <div class="exercise-item"><div class="ex-name">Heel slide<span class="ex-sub">Hielglijden · buigen 120° → strekken met voetflex</span></div><div class="ex-freq">1 × 20</div></div>
+      <div class="exercise-item"><div class="ex-name">Quad set<span class="ex-sub">Quadriceps activatie · knieholte in matras drukken</span></div><div class="ex-freq">1 × 20</div></div>
+      <div class="exercise-item"><div class="ex-name">VMO-activatie<span class="ex-sub">Been licht naar buiten, binnenkant knie aantikken</span></div><div class="ex-freq">1 × 20</div></div>
+      <div class="exercise-item"><div class="ex-name">Hip adduction<span class="ex-sub">Adductie zijlig · been naar binnen heffen</span></div><div class="ex-freq">1 × 20</div></div>
+      <div class="exercise-item"><div class="ex-name">Hip abduction<span class="ex-sub">Abductie zijlig · been naar buiten heffen</span></div><div class="ex-freq">1 × 20</div></div>
+      <div class="exercise-item"><div class="ex-name">Abdominal rollback<span class="ex-sub">Sit-back · excentrisch terugkantelen</span></div><div class="ex-freq">1 × 20</div></div>
+      <div class="exercise-item"><div class="ex-name">Glute bridge<span class="ex-sub">Brug · bekken omhoog heffen</span></div><div class="ex-freq">1 × 20</div></div>
+      <div class="exercise-item"><div class="ex-name">Adductor squeeze<span class="ex-sub">Adductoren knijp · kussen tussen knieën samenknijpen</span></div><div class="ex-freq">1 × 20</div></div>
+      <div class="exercise-item"><div class="ex-name">Seated knee extension<span class="ex-sub">Knie-extensie zit · bungelen op bedrand</span></div><div class="ex-freq alt">3 × 20</div></div>
+      <div class="exercise-item"><div class="ex-name">Eccentric heel drop<span class="ex-sub">Kuitverlaging · 2 benen op traptrede</span></div><div class="ex-freq alt">3 × 10</div></div>
+      <div class="exercise-item"><div class="ex-name">Fietsen<span class="ex-sub">Hometrainer</span></div><div class="ex-freq alt">10 min</div></div>
+    </div>
   </div>
 
   <footer>
@@ -440,12 +420,7 @@ document.write('<link rel="manifest" href="' + manifestUrl + '">');
   </footer>
 </div>
 
-<!-- Animation overlay -->
-<div class="anim-overlay" id="animOverlay" onclick="closeAnim()">
-  <canvas class="anim-canvas" id="animCanvas" width="260" height="260"></canvas>
-  <div class="anim-message" id="animMessage">Reeks voltooid!</div>
-  <div class="anim-sub" id="animSub">Tik om verder te gaan</div>
-</div>
+<!-- Geen animatie overlay meer, alleen geluid -->
 
 <!-- Medal popup -->
 <div class="medal-popup" id="medalPopup" onclick="closeMedalPopup()">
@@ -513,7 +488,7 @@ document.querySelectorAll('.check').forEach(check => {
     check.closest('.exercise-item').querySelector('.ex-name').classList.add('done-text');
   }
 });
-for (let i = 0; i < 5; i++) {
+for (let i = 0; i < 3; i++) {
   if (blockState[i] === 'collapsed') document.getElementById('block-' + i).classList.add('collapsed');
 }
 
@@ -559,7 +534,7 @@ function updateAll() {
 
   // Per reeks
   let reeksDone = 0;
-  [0,1,2,3,4].forEach(i => {
+  [0,1,2].forEach(i => {
     const checks = document.querySelectorAll(`[data-id^="${i}-"]`);
     const doneChecks = document.querySelectorAll(`[data-id^="${i}-"].done`);
     document.getElementById('bprog-' + i).textContent = doneChecks.length + '/' + checks.length;
@@ -574,8 +549,7 @@ function updateAll() {
   // Check if new reeks just completed
   if (reeksDone > prevReeksDone) {
     const justDone = reeksDone;
-    if (justDone === 5) {
-      // Day complete!
+    if (justDone === 3) {
       setTimeout(() => showDayComplete(), 400);
     } else {
       setTimeout(() => showReeksAnim(justDone), 400);
@@ -583,7 +557,14 @@ function updateAll() {
   }
   prevReeksDone = reeksDone;
 
-  document.getElementById('reeksLabel').textContent = reeksDone > 0 ? reeksDone + ' van 5 klaar' : '';
+  // Vooruitkijkend label
+  if (reeksDone === 3) {
+    document.getElementById('reeksLabel').textContent = 'Alle sessies klaar! 🎉';
+  } else {
+    const volgende = reeksDone + 1;
+    const tijden = ['10:00', '14:30', '19:00'];
+    document.getElementById('reeksLabel').textContent = reeksDone > 0 ? `Sessie ${volgende} om ${tijden[reeksDone]}` : '';
+  }
 }
 
 // ── SOUND ──
@@ -612,232 +593,26 @@ function vibrate(pattern) {
   if (navigator.vibrate) navigator.vibrate(pattern);
 }
 
-// ── BALL ANIMATION ──
+// ── GELUID ONLY (geen animatie) ──
 let animFrame;
 function showReeksAnim(reeksCount) {
   playRewardSound(false);
   vibrate([80, 40, 80]);
-  const overlay = document.getElementById('animOverlay');
-  const canvas = document.getElementById('animCanvas');
-  const ctx = canvas.getContext('2d');
-  document.getElementById('animMessage').textContent = 'Reeks ' + reeksCount + ' klaar!';
-  document.getElementById('animSub').textContent = 'Tik om verder te gaan';
-  overlay.classList.add('show');
-  runBallAnim(ctx, canvas, reeksCount, false);
+  showToast('Sessie ' + reeksCount + ' klaar! 💪');
 }
 
 function showDayComplete() {
   const medal = getMedalForDate(TODAY);
-  // Save to history
   history[TODAY] = { done: true, medal };
   localStorage.setItem(HISTORY_KEY, JSON.stringify(history));
-
   playRewardSound(true);
   vibrate([100, 50, 100, 50, 200]);
-
-  // Show ball kick anim first
-  const overlay = document.getElementById('animOverlay');
-  const canvas = document.getElementById('animCanvas');
-  const ctx = canvas.getContext('2d');
-  document.getElementById('animMessage').textContent = 'Dag voltooid! 🎉';
-  document.getElementById('animSub').textContent = 'Tik om je medaille te zien';
-  overlay.classList.add('show');
-  runBallAnim(ctx, canvas, 5, true);
+  setTimeout(() => showMedalPopup(), 400);
   renderCalendar();
 }
 
-function runBallAnim(ctx, canvas, bounces, kick) {
-  cancelAnimationFrame(animFrame);
-  const W = canvas.width, H = canvas.height;
-  const ballR = 26;
-  const GRAVITY = 1.1;
-
-  // Ball starts off-screen bottom-left
-  let ballX = -ballR;
-  let ballY = H + ballR;
-  let ballRot = 0;
-  let done = false;
-  let bounced = false;
-
-  // Phase 1: fly in from bottom-left to bounce point (center-bottom area)
-  const bounceX = W * 0.48;
-  const bounceY = H * 0.82;
-
-  // Phase 2: after bounce, fly to top-right
-  // We'll use a parametric approach: t goes 0→1
-  let t = 0;
-  const PHASE1_DURATION = 38; // frames
-  const PHASE2_DURATION = 42; // frames
-  let frame = 0;
-
-  // Easing
-  function easeInOut(t) { return t < 0.5 ? 2*t*t : -1+(4-2*t)*t; }
-  function easeOut(t) { return 1 - (1-t)*(1-t); }
-
-  function drawBall(x, y, rot) {
-    ctx.save();
-    ctx.translate(x, y);
-    ctx.rotate(rot);
-    // Shadow
-    ctx.beginPath();
-    ctx.ellipse(0, ballR + 4, ballR * 0.7, 5, 0, 0, Math.PI * 2);
-    ctx.fillStyle = 'rgba(0,0,0,0.18)';
-    ctx.fill();
-    // Ball body
-    ctx.beginPath();
-    ctx.arc(0, 0, ballR, 0, Math.PI * 2);
-    ctx.fillStyle = '#f0f0f0';
-    ctx.fill();
-    ctx.strokeStyle = '#1a1a1a';
-    ctx.lineWidth = 1.5;
-    ctx.stroke();
-    // Pentagon center
-    ctx.beginPath();
-    ctx.arc(0, 0, ballR * 0.28, 0, Math.PI * 2);
-    ctx.fillStyle = '#1a1a1a';
-    ctx.fill();
-    // 5 patches
-    for (let i = 0; i < 5; i++) {
-      const angle = (i / 5) * Math.PI * 2 - Math.PI / 2;
-      const px = Math.cos(angle) * ballR * 0.58;
-      const py = Math.sin(angle) * ballR * 0.58;
-      ctx.beginPath();
-      ctx.arc(px, py, ballR * 0.22, 0, Math.PI * 2);
-      ctx.fillStyle = '#1a1a1a';
-      ctx.fill();
-    }
-    ctx.restore();
-  }
-
-  // Squash on bounce
-  function drawBallSquash(x, y, rot, squashY, squashX) {
-    ctx.save();
-    ctx.translate(x, y);
-    ctx.rotate(rot);
-    ctx.scale(squashX, squashY);
-    ctx.beginPath();
-    ctx.arc(0, 0, ballR, 0, Math.PI * 2);
-    ctx.fillStyle = '#f0f0f0';
-    ctx.fill();
-    ctx.strokeStyle = '#1a1a1a';
-    ctx.lineWidth = 1.5 / Math.min(squashX, squashY);
-    ctx.stroke();
-    ctx.beginPath();
-    ctx.arc(0, 0, ballR * 0.28, 0, Math.PI * 2);
-    ctx.fillStyle = '#1a1a1a';
-    ctx.fill();
-    for (let i = 0; i < 5; i++) {
-      const angle = (i / 5) * Math.PI * 2 - Math.PI / 2;
-      const px = Math.cos(angle) * ballR * 0.58;
-      const py = Math.sin(angle) * ballR * 0.58;
-      ctx.beginPath();
-      ctx.arc(px, py, ballR * 0.22, 0, Math.PI * 2);
-      ctx.fillStyle = '#1a1a1a';
-      ctx.fill();
-    }
-    ctx.restore();
-  }
-
-  // Speed lines
-  function drawSpeedLines(x, y, vx, vy, alpha) {
-    ctx.save();
-    ctx.globalAlpha = alpha;
-    ctx.strokeStyle = 'rgba(255,255,255,0.6)';
-    ctx.lineWidth = 2;
-    for (let i = 1; i <= 3; i++) {
-      const len = i * 10;
-      ctx.beginPath();
-      ctx.moveTo(x - vx * i * 0.8, y - vy * i * 0.8);
-      ctx.lineTo(x - vx * i * 0.8 - vx * 0.4, y - vy * i * 0.8 - vy * 0.4);
-      ctx.globalAlpha = alpha * (0.5 - i * 0.12);
-      ctx.stroke();
-    }
-    ctx.restore();
-  }
-
-  // Impact stars at bounce point
-  let showImpact = false;
-  let impactFrame = 0;
-
-  function drawImpact(x, y, progress) {
-    ctx.save();
-    const numRays = 8;
-    for (let i = 0; i < numRays; i++) {
-      const angle = (i / numRays) * Math.PI * 2;
-      const len = progress * ballR * 1.8;
-      ctx.beginPath();
-      ctx.moveTo(x + Math.cos(angle) * ballR * 0.5, y + Math.sin(angle) * ballR * 0.5);
-      ctx.lineTo(x + Math.cos(angle) * (ballR * 0.5 + len), y + Math.sin(angle) * (ballR * 0.5 + len));
-      ctx.strokeStyle = `rgba(255, 220, 50, ${1 - progress})`;
-      ctx.lineWidth = 3 * (1 - progress);
-      ctx.stroke();
-    }
-    ctx.restore();
-  }
-
-  function animate() {
-    ctx.clearRect(0, 0, W, H);
-    frame++;
-
-    if (frame <= PHASE1_DURATION) {
-      // Phase 1: arc from bottom-left into bounce point
-      const p = frame / PHASE1_DURATION;
-      const ep = easeInOut(p);
-      // Parabolic arc: start bottom-left, land at bounceX/bounceY
-      const startX = -ballR * 2;
-      const startY = H + ballR * 2;
-      // Control point for arc (gives it a nice curved path)
-      const cpX = bounceX * 0.3;
-      const cpY = bounceY - H * 0.35;
-      ballX = (1-ep)*(1-ep)*startX + 2*(1-ep)*ep*cpX + ep*ep*bounceX;
-      ballY = (1-ep)*(1-ep)*startY + 2*(1-ep)*ep*cpY + ep*ep*bounceY;
-      ballRot += 0.12;
-      const vx = ballX - ((1-(ep-0.01))*(1-(ep-0.01))*startX + 2*(1-(ep-0.01))*(ep-0.01)*cpX + (ep-0.01)*(ep-0.01)*bounceX);
-      const vy = ballY - ((1-(ep-0.01))*(1-(ep-0.01))*startY + 2*(1-(ep-0.01))*(ep-0.01)*cpY + (ep-0.01)*(ep-0.01)*bounceY);
-      drawSpeedLines(ballX, ballY, vx * 3, vy * 3, 0.7);
-      drawBall(ballX, ballY, ballRot);
-    } else if (frame <= PHASE1_DURATION + 8) {
-      // Bounce squash frames
-      const bf = frame - PHASE1_DURATION;
-      const squashProgress = bf / 8;
-      const squashY = bf <= 4 ? 1 - 0.35 * (bf / 4) : 0.65 + 0.35 * ((bf - 4) / 4);
-      const squashX = bf <= 4 ? 1 + 0.25 * (bf / 4) : 1.25 - 0.25 * ((bf - 4) / 4);
-      drawImpact(bounceX, bounceY + ballR * 0.8, squashProgress);
-      drawBallSquash(bounceX, bounceY, ballRot, squashY, squashX);
-      ballRot += 0.08;
-    } else {
-      // Phase 2: launch to top-right
-      const p2 = (frame - PHASE1_DURATION - 8) / PHASE2_DURATION;
-      if (p2 >= 1) { done = true; return; }
-      const ep2 = easeOut(p2);
-      const endX = W + ballR * 3;
-      const endY = -ballR * 3;
-      const cp2X = W * 0.75;
-      const cp2Y = H * 0.1;
-      ballX = (1-ep2)*(1-ep2)*bounceX + 2*(1-ep2)*ep2*cp2X + ep2*ep2*endX;
-      ballY = (1-ep2)*(1-ep2)*bounceY + 2*(1-ep2)*ep2*cp2Y + ep2*ep2*endY;
-      ballRot += 0.18;
-      const prevEp = easeOut(Math.max(0, p2 - 0.02));
-      const pvx = ballX - ((1-prevEp)*(1-prevEp)*bounceX + 2*(1-prevEp)*prevEp*cp2X + prevEp*prevEp*endX);
-      const pvy = ballY - ((1-prevEp)*(1-prevEp)*bounceY + 2*(1-prevEp)*prevEp*cp2Y + prevEp*prevEp*endY);
-      drawSpeedLines(ballX, ballY, pvx * 3, pvy * 3, 0.8 * (1 - p2));
-      drawBall(ballX, ballY, ballRot);
-    }
-
-    if (!done) animFrame = requestAnimationFrame(animate);
-  }
-
-  animate();
-}
-
-function closeAnim() {
-  cancelAnimationFrame(animFrame);
-  document.getElementById('animOverlay').classList.remove('show');
-  // If day was complete, show medal popup
-  if (history[TODAY] && history[TODAY].done && prevReeksDone === 5) {
-    setTimeout(() => showMedalPopup(), 300);
-  }
-}
+function closeAnim() {}
+function runBallAnim() {}
 
 function showMedalPopup() {
   const medal = history[TODAY] ? history[TODAY].medal : getMedalForDate(TODAY);
